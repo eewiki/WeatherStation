@@ -9,10 +9,10 @@ Adafruit_INA219 ina219_B(0x41);
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 void setup () {
-  while (!Serial);     // will pause Zero, Leonardo, etc until serial console opens
+  //while (!Serial);     // will pause Zero, Leonardo, etc until serial console opens
   uint32_t currentFrequency;
 
-  Serial.begin(115200);
+  Serial.begin(57600);
   Serial.println("Hello!");
   
   if (! rtc.begin()) {
