@@ -12,17 +12,17 @@ Adafruit_INA219 ina219_A;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 /* 16Mhz */
-//#define ws_baud 57600
-//#define ws_one_second 1000
-//#define ws_short_delay 200
+#define ws_baud 57600
+#define ws_one_second 1000
+#define ws_short_delay 200
 
 /* 8Mhz */
-#define ws_baud 115200
-#define ws_one_second 500
-#define ws_short_delay 100
+//#define ws_baud 115200
+//#define ws_one_second 500
+//#define ws_short_delay 100
 
 void setup () {
-	clock_prescale_set(clock_div_2);
+	//clock_prescale_set(clock_div_2);
 
 	Serial1.begin(ws_baud);
 	Serial1.println("Hello!");
