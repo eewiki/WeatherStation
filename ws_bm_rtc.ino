@@ -2,14 +2,10 @@
 #include <avr/power.h>
 #include "Adafruit_INA219.h"
 #include "RTClib.h"
-/* https://www.digikey.com/product-detail/en/sparkfun-electronics/SEN-11050/1568-1228-ND/5721423 */
-#include "OneWire.h"
 
 RTC_DS1307 rtc;
 Adafruit_INA219 ina219_A;
-//Adafruit_INA219 ina219_B(0x41);
-
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+Adafruit_INA219 ina219_B(0x44);
 
 /* 16Mhz */
 #define ws_baud 57600
@@ -45,7 +41,7 @@ void setup () {
 	// By default the initialization will use the largest range (32V, 2A).  However
 	// you can call a setCalibration function to change this range (see comments).
 	ina219_A.begin();
-//	ina219_B.begin();
+	ina219_B.begin();
 	// To use a slightly lower 32V, 1A range (higher precision on amps):
 	//ina219.setCalibration_32V_1A();
 	// Or to use a lower 16V, 400mA range (higher precision on volts and amps):
@@ -87,63 +83,58 @@ void loop () {
 	current_mA_A = ina219_A.getCurrent_mA();
 	loadvoltage_A = busvoltage_A + (shuntvoltage_A / 1000);
 
-/*
 	shuntvoltage_B = ina219_B.getShuntVoltage_mV();
 	busvoltage_B = ina219_B.getBusVoltage_V();
 	current_mA_B = ina219_B.getCurrent_mA();
 	loadvoltage_B = busvoltage_B + (shuntvoltage_B / 1000);
-*/
 
-	delay(ws_short_delay);
-
-	Serial1.print("$LOAD:"); Serial1.print(now.unixtime());
+	Serial1.print("$LOAD:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":BusVolt:"); Serial1.print(busvoltage_A); Serial1.println("V*");
-
 	delay(ws_short_delay);
 
-	Serial1.print("$LOAD:"); Serial1.print(now.unixtime());
+	Serial1.print("$LOAD:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":ShuntVolt:"); Serial1.print(shuntvoltage_A); Serial1.println("mV*");
-
 	delay(ws_short_delay);
 
-	Serial1.print("$LOAD:"); Serial1.print(now.unixtime());
+	Serial1.print("$LOAD:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":LoadVolt:"); Serial1.print(loadvoltage_A); Serial1.println("V*");
-
 	delay(ws_short_delay);
 
-	Serial1.print("$LOAD:"); Serial1.print(now.unixtime());
+	Serial1.print("$LOAD:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":Current:"); Serial1.print(current_mA_A); Serial1.println("mA*");
+	delay(ws_short_delay);
 
 	delay(ws_short_delay);
 
-/*
-
-	delay(ws_short_delay);
-
-	Serial1.print("$SOLAR:"); Serial1.print(now.unixtime());
+	Serial1.print("$CHARGER:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":BusVolt:"); Serial1.print(busvoltage_B); Serial1.println("V*");
-
 	delay(ws_short_delay);
 
-	Serial1.print("$SOLAR:"); Serial1.print(now.unixtime());
+	Serial1.print("$CHARGER:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":ShuntVolt:"); Serial1.print(shuntvoltage_B); Serial1.println("mV*");
-
 	delay(ws_short_delay);
 
-	Serial1.print("$SOLAR:"); Serial1.print(now.unixtime());
+	Serial1.print("$CHARGER:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":LoadVolt:"); Serial1.print(loadvoltage_B); Serial1.println("V*");
-
 	delay(ws_short_delay);
 
-	Serial1.print("$SOLAR:"); Serial1.print(now.unixtime());
+	Serial1.print("$CHARGER:");
+	Serial1.print(now.unixtime());
 	Serial1.print(":Current:"); Serial1.print(current_mA_B); Serial1.println("mA*");
-*/
-
 	Serial1.println("");
-
 	delay(ws_short_delay);
+	delay(ws_short_delay);
+
 	delay(ws_one_second);
 	delay(ws_one_second);
 	delay(ws_one_second);
 }
+
 
