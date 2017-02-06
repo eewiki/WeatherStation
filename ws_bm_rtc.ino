@@ -81,60 +81,75 @@ void loop () {
 	shuntvoltage_A = ina219_A.getShuntVoltage_mV();
 	busvoltage_A = ina219_A.getBusVoltage_V();
 	current_mA_A = ina219_A.getCurrent_mA();
-	loadvoltage_A = busvoltage_A + (shuntvoltage_A / 1000);
+//	loadvoltage_A = busvoltage_A + (shuntvoltage_A / 1000);
 
 	shuntvoltage_B = ina219_B.getShuntVoltage_mV();
 	busvoltage_B = ina219_B.getBusVoltage_V();
 	current_mA_B = ina219_B.getCurrent_mA();
-	loadvoltage_B = busvoltage_B + (shuntvoltage_B / 1000);
+//	loadvoltage_B = busvoltage_B + (shuntvoltage_B / 1000);
 
 	Serial1.print("$LOAD:");
 	Serial1.print(now.unixtime());
-	Serial1.print(":BusVolt:"); Serial1.print(busvoltage_A); Serial1.println("V*");
+	Serial1.print(":BusVolt:");
+	Serial1.print(busvoltage_A);
+	Serial1.println("V*");
 	delay(ws_short_delay);
 
-	Serial1.print("$LOAD:");
-	Serial1.print(now.unixtime());
-	Serial1.print(":ShuntVolt:"); Serial1.print(shuntvoltage_A); Serial1.println("mV*");
-	delay(ws_short_delay);
+//	Serial1.print("$LOAD:");
+//	Serial1.print(now.unixtime());
+//	Serial1.print(":ShuntVolt:");
+//	Serial1.print(shuntvoltage_A);
+//	Serial1.println("mV*");
+//	delay(ws_short_delay);
+
+//	Serial1.print("$LOAD:");
+//	Serial1.print(now.unixtime());
+//	Serial1.print(":LoadVolt:");
+//	Serial1.print(loadvoltage_A);
+//	Serial1.println("V*");
+//	delay(ws_short_delay);
 
 	Serial1.print("$LOAD:");
 	Serial1.print(now.unixtime());
-	Serial1.print(":LoadVolt:"); Serial1.print(loadvoltage_A); Serial1.println("V*");
-	delay(ws_short_delay);
-
-	Serial1.print("$LOAD:");
-	Serial1.print(now.unixtime());
-	Serial1.print(":Current:"); Serial1.print(current_mA_A); Serial1.println("mA*");
+	Serial1.print(":Current:");
+	Serial1.print(current_mA_A);
+	Serial1.println("mA*");
 	delay(ws_short_delay);
 
 	delay(ws_short_delay);
 
 	Serial1.print("$CHARGER:");
 	Serial1.print(now.unixtime());
-	Serial1.print(":BusVolt:"); Serial1.print(busvoltage_B); Serial1.println("V*");
+	Serial1.print(":BusVolt:");
+	Serial1.print(busvoltage_B);
+	Serial1.println("V*");
 	delay(ws_short_delay);
+
+//	Serial1.print("$CHARGER:");
+//	Serial1.print(now.unixtime());
+//	Serial1.print(":ShuntVolt:");
+//	Serial1.print(shuntvoltage_B);
+//	Serial1.println("mV*");
+//	delay(ws_short_delay);
+
+//	Serial1.print("$CHARGER:");
+//	Serial1.print(now.unixtime());
+//	Serial1.print(":LoadVolt:");
+//	Serial1.print(loadvoltage_B);
+//	Serial1.println("V*");
+//	delay(ws_short_delay);
 
 	Serial1.print("$CHARGER:");
 	Serial1.print(now.unixtime());
-	Serial1.print(":ShuntVolt:"); Serial1.print(shuntvoltage_B); Serial1.println("mV*");
-	delay(ws_short_delay);
+	Serial1.print(":Current:");
+	Serial1.print(current_mA_B);
+	Serial1.println("mA*");
 
-	Serial1.print("$CHARGER:");
-	Serial1.print(now.unixtime());
-	Serial1.print(":LoadVolt:"); Serial1.print(loadvoltage_B); Serial1.println("V*");
-	delay(ws_short_delay);
-
-	Serial1.print("$CHARGER:");
-	Serial1.print(now.unixtime());
-	Serial1.print(":Current:"); Serial1.print(current_mA_B); Serial1.println("mA*");
 	Serial1.println("");
 	delay(ws_short_delay);
-	delay(ws_short_delay);
 
+	delay(ws_one_second);
 	delay(ws_one_second);
 	delay(ws_one_second);
 	delay(ws_one_second);
 }
-
-
