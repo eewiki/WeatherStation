@@ -152,4 +152,10 @@ void loop () {
 	delay(ws_one_second);
 	delay(ws_one_second);
 	delay(ws_one_second);
+
+	delay(ws_one_second);
+	delay(ws_one_second);
+	delay(ws_one_second);
+	delay(ws_one_second);
+	delay(ws_one_second);
 }
