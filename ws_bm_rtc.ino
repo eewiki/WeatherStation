@@ -17,6 +17,10 @@ Adafruit_INA219 ina219_B(0x44);
 //#define ws_one_second 500
 //#define ws_short_delay 100
 
+const int XBee_wake = 9;
+
+int sensorPin = 0;
+
 void setup () {
 	//clock_prescale_set(clock_div_2);
 
@@ -63,6 +67,33 @@ void loop () {
 
 	DateTime now = rtc.now();
 
+	shuntvoltage_A = ina219_A.getShuntVoltage_mV();
+	busvoltage_A = ina219_A.getBusVoltage_V();
+	current_mA_A = ina219_A.getCurrent_mA();
+
+	shuntvoltage_B = ina219_B.getShuntVoltage_mV();
+	busvoltage_B = ina219_B.getBusVoltage_V();
+	current_mA_B = ina219_B.getCurrent_mA();
+
+	int reading = analogRead(sensorPin);
+	float voltage = reading * 5.0;
+	voltage /= 1024.0;
+	float temperatureC = (voltage - 0.5) * 100;
+	float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
+
+	// wake up the XBee
+	pinMode(XBee_wake, OUTPUT);
+	digitalWrite(XBee_wake, LOW);
+	delay(ws_short_delay);
+
+	Serial1.print("$TEMP:");
+	Serial1.print(now.unixtime());
+	Serial1.print(":RAW:");
+	Serial1.print(voltage);
+	Serial1.print(":CALC:");
+	Serial1.print(temperatureF); Serial1.println("F*");
+	delay(ws_short_delay);
+
 	Serial1.print("$DATE:");
 	Serial1.print(now.year(), DEC);
 	Serial1.print('/');
@@ -78,36 +109,12 @@ void loop () {
 	Serial1.print('*');
 	Serial1.println();
 
-	shuntvoltage_A = ina219_A.getShuntVoltage_mV();
-	busvoltage_A = ina219_A.getBusVoltage_V();
-	current_mA_A = ina219_A.getCurrent_mA();
-//	loadvoltage_A = busvoltage_A + (shuntvoltage_A / 1000);
-
-	shuntvoltage_B = ina219_B.getShuntVoltage_mV();
-	busvoltage_B = ina219_B.getBusVoltage_V();
-	current_mA_B = ina219_B.getCurrent_mA();
-//	loadvoltage_B = busvoltage_B + (shuntvoltage_B / 1000);
-
 	Serial1.print("$LOAD:");
 	Serial1.print(now.unixtime());
 	Serial1.print(":BusVolt:");
 	Serial1.print(busvoltage_A);
 	Serial1.println("V*");
 	delay(ws_short_delay);
-
-//	Serial1.print("$LOAD:");
-//	Serial1.print(now.unixtime());
-//	Serial1.print(":ShuntVolt:");
-//	Serial1.print(shuntvoltage_A);
-//	Serial1.println("mV*");
-//	delay(ws_short_delay);
-
-//	Serial1.print("$LOAD:");
-//	Serial1.print(now.unixtime());
-//	Serial1.print(":LoadVolt:");
-//	Serial1.print(loadvoltage_A);
-//	Serial1.println("V*");
-//	delay(ws_short_delay);
 
 	Serial1.print("$LOAD:");
 	Serial1.print(now.unixtime());
@@ -116,7 +123,9 @@ void loop () {
 	Serial1.println("mA*");
 	delay(ws_short_delay);
 
-	delay(ws_short_delay);
+	shuntvoltage_A = ina219_A.getShuntVoltage_mV();
+	busvoltage_A = ina219_A.getBusVoltage_V();
+	current_mA_A = ina219_A.getCurrent_mA();
 
 	Serial1.print("$CHARGER:");
 	Serial1.print(now.unixtime());
@@ -125,28 +134,32 @@ void loop () {
 	Serial1.println("V*");
 	delay(ws_short_delay);
 
-//	Serial1.print("$CHARGER:");
-//	Serial1.print(now.unixtime());
-//	Serial1.print(":ShuntVolt:");
-//	Serial1.print(shuntvoltage_B);
-//	Serial1.println("mV*");
-//	delay(ws_short_delay);
-
-//	Serial1.print("$CHARGER:");
-//	Serial1.print(now.unixtime());
-//	Serial1.print(":LoadVolt:");
-//	Serial1.print(loadvoltage_B);
-//	Serial1.println("V*");
-//	delay(ws_short_delay);
-
 	Serial1.print("$CHARGER:");
 	Serial1.print(now.unixtime());
 	Serial1.print(":Current:");
 	Serial1.print(current_mA_B);
 	Serial1.println("mA*");
 
+	Serial1.print("$LOADXB:");
+	Serial1.print(now.unixtime());
+	Serial1.print(":BusVolt:");
+	Serial1.print(busvoltage_A);
+	Serial1.println("V*");
+	delay(ws_short_delay);
+
+	Serial1.print("$LOADXB:");
+	Serial1.print(now.unixtime());
+	Serial1.print(":Current:");
+	Serial1.print(current_mA_A);
+	Serial1.println("mA*");
+	delay(ws_short_delay);
+
 	Serial1.println("");
 	delay(ws_short_delay);
+
+	// put the XBee to sleep
+	pinMode(XBee_wake, INPUT); // put pin in a high impedence state
+	digitalWrite(XBee_wake, HIGH);
 
 	delay(ws_one_second);
 	delay(ws_one_second);
