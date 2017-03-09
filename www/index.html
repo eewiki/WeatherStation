@@ -1,0 +1,40 @@
+<html>
+<head>
+<script type="text/javascript" src="dygraph.min.js"></script>
+<link rel="stylesheet" href="dygraph.css" />
+</head>
+<body>
+
+<div id="graphdiv_voltage"></div>
+<script type="text/javascript">
+  g = new Dygraph(
+        document.getElementById("graphdiv_voltage"),  // containing div
+        "voltage_data.csv",
+        { }                                   // the options
+      );
+
+</script>
+
+<div id="graphdiv_current"></div>
+<script type="text/javascript">
+  g = new Dygraph(
+        document.getElementById("graphdiv_current"),  // containing div
+        "current_data.csv",
+        { }                                   // the options
+      );
+
+</script>
+
+<div id="graphdiv_charger_current"></div>
+<script type="text/javascript">
+  g = new Dygraph(
+        document.getElementById("graphdiv_charger_current"),  // containing div
+        "charger_current_data.csv",
+        { }                                   // the options
+      );
+
+</script>
+
+
+</body>
+</html>
