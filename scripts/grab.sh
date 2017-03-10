@@ -32,6 +32,7 @@ do
 
 
 	get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
+	get_time_weather=$(env TZ=America/North_Dakota/Center date +"%Y-%m-%dT%k:%M:%S")
 
 	if [ "x$load_busvolt" != "x" ] && [ "x$load_current" != "x" ] ; then
 		echo "$get_time,$load_busvolt" >> /var/www/html/dygraphs/data/load_voltage_data.csv
@@ -62,4 +63,19 @@ do
 	if [ "x$wbt" != "x" ] ; then
 		echo "$get_time,$wbt" >> /var/www/html/dygraphs/data/wbt_data.csv
 	fi
+
+	if [ "x$wbh" != "x" ] && [ "x$wbp" != "x" ] && [ "x$wbt" != "x" ] ; then
+		wfile="/var/www/html/dygraphs/data/current.xml"
+		echo "<current>" > ${wfile}
+		echo "    <temperature value="$wbt" min="$wbt" max="$wbt" unit=\"fahrenheit\"/>" >> ${wfile}
+		echo "    <humidity value="$wbh" unit=\"%\">" >> ${wfile}
+#		echo "    <pressure value="1020" unit="hPa">" >> ${wfile}
+#		echo "    <wind>" >> ${wfile}
+#		echo "     <speed value=/"7.78/" name=/"Moderate breeze/">" >> ${wfile}
+#		echo "     <direction value=/"140/" code=/"SE/" name="SouthEast">" >> ${wfile}
+#		echo "    </wind>" >> ${wfile}
+		echo "    <lastupdate value="$get_time_weather">" >> ${wfile}
+		echo "</current>
+	fi
+
 done
