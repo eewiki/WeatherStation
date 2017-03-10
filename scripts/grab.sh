@@ -14,7 +14,7 @@ do
 	charger_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '$CHARGER:' | grep BusVolt | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
 	charger_current=$(echo $READ | sed 's/ /\n/g' | grep '$CHARGER:' | grep Current | awk -F ':' '{print $4}' | awk -F 'mA*' '{print $1}' || true)
 
-	get_time=$(date +"%Y/%m/%d %k:%M:%S")
+	get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 
 	if [ ! -f /var/www/html/dygraphs/load_voltage_data.csv  ] ; then
 		echo "Date,Load Voltage (V)" > /var/www/html/dygraphs/load_voltage_data.csv
