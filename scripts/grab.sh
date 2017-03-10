@@ -71,7 +71,7 @@ do
 		fi
 		echo "min=[$wbt_min]"
 
-		if [ 1 -eq "$(echo "${wbt} < ${wbt_max}" | bc)" ] ; then
+		if [ 1 -eq "$(echo "${wbt} > ${wbt_max}" | bc)" ] ; then
 			wbt_max=${wbt}
 		fi
 		echo "max=[$wbt_max]"
