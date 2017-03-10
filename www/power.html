@@ -12,6 +12,7 @@
 		document.getElementById("graphdiv_voltage"),
 		"voltage_data.csv",
 		{
+			labels: [ 'Date', 'Load', 'Charger'],
 			rollPeriod: 12,
 			title: 'Battery/Charger Voltage',
 			ylabel: 'Voltage (V)',
@@ -25,6 +26,7 @@
 		document.getElementById("graphdiv_current"),
 		"current_data.csv",
 		{
+			labels: [ 'Date', 'Load', 'Charger'],
 			rollPeriod: 12,
 			title: 'Battery/Charger Current',
 			ylabel: 'Current (mA)',
@@ -38,6 +40,7 @@
 		document.getElementById("graphdiv_charger_current"),
 		"charger_current_data.csv",
 		{
+			labels: [ 'Date', 'Charger'],
 			rollPeriod: 12,
 			title: 'Charger Current',
 			ylabel: 'Current (mA)',
