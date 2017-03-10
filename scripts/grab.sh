@@ -4,6 +4,9 @@ port="/dev/ttyUSB0"
 
 stty -F ${port} raw speed 57600 &> /dev/null
 
+wbt_min="140"
+wbt_max="-100"
+
 # Loop
 while [ 1 ];
 do
@@ -62,12 +65,17 @@ do
 
 	if [ "x$wbt" != "x" ] ; then
 		echo "$get_time,$wbt" >> /var/www/html/dygraphs/data/wbt_data.csv
+
+		if [ 1 -eq "$(echo "${wbt} < ${wbt_min}" | bc)" ] ; then
+			wbt_min=${wbt}
+		fi
+		echo "$wbt_min"
 	fi
 
 	if [ "x$wbh" != "x" ] && [ "x$wbp" != "x" ] && [ "x$wbt" != "x" ] ; then
 		wfile="/var/www/html/dygraphs/data/current.xml"
 		echo "<current>" > ${wfile}
-		echo "    <temperature value=\"$wbt\" min=\"$wbt\" max=\"$wbt\" unit=\"fahrenheit\"/>" >> ${wfile}
+		echo "    <temperature value=\"$wbt\" min=\"$wbt_min\" max=\"$wbt\" unit=\"fahrenheit\"/>" >> ${wfile}
 		echo "    <humidity value=\"$wbh\" unit=\"%\">" >> ${wfile}
 		echo "    <pressure value=\"$wbp\" unit=\"hPa\">" >> ${wfile}
 #		echo "    <wind>" >> ${wfile}
