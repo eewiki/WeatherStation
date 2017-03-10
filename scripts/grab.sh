@@ -67,15 +67,15 @@ do
 	if [ "x$wbh" != "x" ] && [ "x$wbp" != "x" ] && [ "x$wbt" != "x" ] ; then
 		wfile="/var/www/html/dygraphs/data/current.xml"
 		echo "<current>" > ${wfile}
-		echo "    <temperature value="$wbt" min="$wbt" max="$wbt" unit=\"fahrenheit\"/>" >> ${wfile}
+		echo "    <temperature value=\"$wbt\" min=\"$wbt\" max=\"$wbt\" unit=\"fahrenheit\"/>" >> ${wfile}
 		echo "    <humidity value="$wbh" unit=\"%\">" >> ${wfile}
 #		echo "    <pressure value="1020" unit="hPa">" >> ${wfile}
 #		echo "    <wind>" >> ${wfile}
 #		echo "     <speed value=/"7.78/" name=/"Moderate breeze/">" >> ${wfile}
 #		echo "     <direction value=/"140/" code=/"SE/" name="SouthEast">" >> ${wfile}
 #		echo "    </wind>" >> ${wfile}
-		echo "    <lastupdate value="$get_time_weather">" >> ${wfile}
-		echo "</current>
+		echo "    <lastupdate value=\"$get_time_weather\">" >> ${wfile}
+		echo "</current>" >> ${wfile}
 	fi
 
 done
