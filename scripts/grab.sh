@@ -6,11 +6,12 @@ stty -F ${port} raw speed 57600 &> /dev/null
 
 wbt_min="140"
 wbt_max="-100"
+day="40"
 
 # Loop
 while [ 1 ];
 do
-	READ=` grabserial -d /dev/ttyUSB0 -b 57600 -m "$" -q "^\n"`
+	READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "$" -q "^\n"`
 	echo "[$READ]"
 	load_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '$LOAD:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
 	echo "load_busvolt=[$load_busvolt]"
@@ -22,10 +23,6 @@ do
 	charger_current=$(echo $READ | sed 's/ /\n/g' | grep '$CHARGER:' | grep Current | tail -1 | awk -F ':' '{print $4}' | awk -F 'mA*' '{print $1}' || true)
 	echo "charger_current=[$charger_current]"
 
-#$WBH:23:Humid:22.43P*
-#$WBP:23:Pres:99554.00Pa*
-#$WBT:23:TempF:14.11F*
-
 	wbh=$(echo $READ | sed 's/ /\n/g' | grep '$WBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
 	echo "wbh=[$wbh]"
 	wbp=$(echo $READ | sed 's/ /\n/g' | grep '$WBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
@@ -33,9 +30,9 @@ do
 	wbt=$(echo $READ | sed 's/ /\n/g' | grep '$WBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
 	echo "wbt=[$wbt]"
 
-
 	get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 	get_time_weather=$(env TZ=America/North_Dakota/Center date +"%Y-%m-%dT%k:%M:%S")
+	get_day=$(env TZ=America/North_Dakota/Center date +"%d")
 
 	if [ "x$load_busvolt" != "x" ] && [ "x$load_current" != "x" ] ; then
 		echo "$get_time,$load_busvolt" >> /var/www/html/dygraphs/data/load_voltage_data.csv
@@ -65,6 +62,12 @@ do
 
 	if [ "x$wbt" != "x" ] ; then
 		echo "$get_time,$wbt" >> /var/www/html/dygraphs/data/wbt_data.csv
+
+		if [ "x${get_day}" != "x${day}" ] ; then
+			day=${get_day}
+			wbt_max=${wbt}
+			wbt_min=${wbt}
+		fi
 
 		if [ 1 -eq "$(echo "${wbt} < ${wbt_min}" | bc)" ] ; then
 			wbt_min=${wbt}
