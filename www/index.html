@@ -7,34 +7,45 @@
 
 <div id="graphdiv_voltage"></div>
 <script type="text/javascript">
-  g = new Dygraph(
-        document.getElementById("graphdiv_voltage"),  // containing div
-        "voltage_data.csv",
-        { }                                   // the options
-      );
-
+	g = new Dygraph(
+		document.getElementById("graphdiv_voltage"),
+		"voltage_data.csv",
+		{
+			customBars: true,
+			title: 'Battery/Charger Voltage',
+			ylabel: 'Voltage (V)',
+			legend: 'always',
+		}
+	);
 </script>
 
 <div id="graphdiv_current"></div>
 <script type="text/javascript">
-  g = new Dygraph(
-        document.getElementById("graphdiv_current"),  // containing div
-        "current_data.csv",
-        { }                                   // the options
-      );
-
+	g = new Dygraph(
+		document.getElementById("graphdiv_current"),
+		"current_data.csv",
+		{
+			customBars: true,
+			title: 'Battery/Charger Current',
+			ylabel: 'Current (mA)',
+			legend: 'always',
+		}
+	);
 </script>
 
 <div id="graphdiv_charger_current"></div>
 <script type="text/javascript">
-  g = new Dygraph(
-        document.getElementById("graphdiv_charger_current"),  // containing div
-        "charger_current_data.csv",
-        { }                                   // the options
-      );
-
+	g = new Dygraph(
+		document.getElementById("graphdiv_charger_current"),
+		"charger_current_data.csv",
+		{
+			customBars: true,
+			title: 'Charger Current',
+			ylabel: 'Current (mA)',
+			legend: 'always',
+		}
+	);
 </script>
-
 
 </body>
 </html>
