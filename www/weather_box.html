@@ -15,7 +15,7 @@
 			labels: [ 'Date', 'Temperature'],
 			rollPeriod: 12,
 			title: 'Temperature',
-			ylabel: 'Voltage (F)',
+			ylabel: 'Temperature (F)',
 		}
 	);
 </script>
@@ -30,20 +30,6 @@
 			rollPeriod: 12,
 			title: 'Humidity',
 			ylabel: 'Humidity (%)',
-		}
-	);
-</script>
-
-<div id="graphdiv_wbp"></div>
-<script type="text/javascript">
-	g = new Dygraph(
-		document.getElementById("graphdiv_wbp"),
-		"data/wbp_data.csv",
-		{
-			labels: [ 'Date', 'Pressure'],
-			rollPeriod: 12,
-			title: 'Pressure',
-			ylabel: 'Pressure (Pa)',
 		}
 	);
 </script>
