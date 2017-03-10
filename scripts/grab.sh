@@ -16,30 +16,6 @@ do
 
 	get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 
-	if [ ! -f /var/www/html/dygraphs/load_voltage_data.csv  ] ; then
-		echo "Date,Load Voltage (V)" > /var/www/html/dygraphs/load_voltage_data.csv
-	fi
-
-	if [ ! -f /var/www/html/dygraphs/load_current_data.csv  ] ; then
-		echo "Date,Load Current (mA)" > /var/www/html/dygraphs/load_current_data.csv
-	fi
-
-	if [ ! -f /var/www/html/dygraphs/charger_voltage_data.csv  ] ; then
-		echo "Date,Charger Voltage (V)" > /var/www/html/dygraphs/charger_voltage_data.csv
-	fi
-
-	if [ ! -f /var/www/html/dygraphs/charger_current_data.csv  ] ; then
-		echo "Date,Charger Current (mA)" > /var/www/html/dygraphs/charger_current_data.csv
-	fi
-
-	if [ ! -f /var/www/html/dygraphs/voltage_data.csv  ] ; then
-		echo "Date,Load Voltage (V),Charger Voltage (V)" > /var/www/html/dygraphs/voltage_data.csv
-	fi
-
-	if [ ! -f /var/www/html/dygraphs/current_data.csv  ] ; then
-		echo "Date,Load Current (mA),Charger Current (mA)" > /var/www/html/dygraphs/current_data.csv
-	fi
-
 	if [ "x$load_busvolt" != "x" ] && [ "x$load_current" != "x" ] ; then
 		echo "$get_time,$load_busvolt" >> /var/www/html/dygraphs/load_voltage_data.csv
 		echo "$get_time,$load_current" >> /var/www/html/dygraphs/load_current_data.csv
