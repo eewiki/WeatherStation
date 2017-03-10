@@ -24,14 +24,18 @@ do
 	if [ "x$load_busvolt" != "x" ] && [ "x$load_current" != "x" ] ; then
 		echo "$get_time,$load_busvolt" >> /var/www/html/dygraphs/load_voltage_data.csv
 		echo "$get_time,$load_current" >> /var/www/html/dygraphs/load_current_data.csv
-		echo "$get_time,$load_busvolt,$charger_busvolt" >> /var/www/html/dygraphs/voltage_data.csv
-		echo "save:[$get_time,$load_busvolt,$charger_busvolt]"
+		if [ "x$charger_busvolt" != "x" ] ; then
+			echo "$get_time,$load_busvolt,$charger_busvolt" >> /var/www/html/dygraphs/voltage_data.csv
+			echo "save:[$get_time,$load_busvolt,$charger_busvolt]"
+		fi
 	fi
 
 	if [ "x$charger_busvolt" != "x" ] && [ "x$charger_current" != "x" ] ; then
 		echo "$get_time,$charger_busvolt" >> /var/www/html/dygraphs/charger_voltage_data.csv
 		echo "$get_time,$charger_current" >> /var/www/html/dygraphs/charger_current_data.csv
-		echo "$get_time,$load_current,$charger_current" >> /var/www/html/dygraphs/current_data.csv
-		echo "save:[$get_time,$load_current,$charger_current]"
+		if [ "x$load_current" != "x" ] ; then
+			echo "$get_time,$load_current,$charger_current" >> /var/www/html/dygraphs/current_data.csv
+			echo "save:[$get_time,$load_current,$charger_current]"
+		fi
 	fi
 done
