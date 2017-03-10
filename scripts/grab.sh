@@ -68,8 +68,8 @@ do
 		wfile="/var/www/html/dygraphs/data/current.xml"
 		echo "<current>" > ${wfile}
 		echo "    <temperature value=\"$wbt\" min=\"$wbt\" max=\"$wbt\" unit=\"fahrenheit\"/>" >> ${wfile}
-		echo "    <humidity value="$wbh" unit=\"%\">" >> ${wfile}
-#		echo "    <pressure value="1020" unit="hPa">" >> ${wfile}
+		echo "    <humidity value=\"$wbh\" unit=\"%\">" >> ${wfile}
+		echo "    <pressure value=\"$wbp\" unit=\"hPa\">" >> ${wfile}
 #		echo "    <wind>" >> ${wfile}
 #		echo "     <speed value=/"7.78/" name=/"Moderate breeze/">" >> ${wfile}
 #		echo "     <direction value=/"140/" code=/"SE/" name="SouthEast">" >> ${wfile}
