@@ -69,13 +69,18 @@ do
 		if [ 1 -eq "$(echo "${wbt} < ${wbt_min}" | bc)" ] ; then
 			wbt_min=${wbt}
 		fi
-		echo "$wbt_min"
+		echo "min=[$wbt_min]"
+
+		if [ 1 -eq "$(echo "${wbt} < ${wbt_max}" | bc)" ] ; then
+			wbt_max=${wbt}
+		fi
+		echo "max=[$wbt_max]"
 	fi
 
 	if [ "x$wbh" != "x" ] && [ "x$wbp" != "x" ] && [ "x$wbt" != "x" ] ; then
 		wfile="/var/www/html/dygraphs/data/current.xml"
 		echo "<current>" > ${wfile}
-		echo "    <temperature value=\"$wbt\" min=\"$wbt_min\" max=\"$wbt\" unit=\"fahrenheit\"/>" >> ${wfile}
+		echo "    <temperature value=\"$wbt\" min=\"$wbt_min\" max=\"$wbt_max\" unit=\"fahrenheit\"/>" >> ${wfile}
 		echo "    <humidity value=\"$wbh\" unit=\"%\">" >> ${wfile}
 		echo "    <pressure value=\"$wbp\" unit=\"hPa\">" >> ${wfile}
 #		echo "    <wind>" >> ${wfile}
