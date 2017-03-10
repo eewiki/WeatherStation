@@ -34,32 +34,32 @@ do
 	get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 
 	if [ "x$load_busvolt" != "x" ] && [ "x$load_current" != "x" ] ; then
-		echo "$get_time,$load_busvolt" >> /var/www/html/dygraphs/load_voltage_data.csv
-		echo "$get_time,$load_current" >> /var/www/html/dygraphs/load_current_data.csv
+		echo "$get_time,$load_busvolt" >> /var/www/html/dygraphs/data/load_voltage_data.csv
+		echo "$get_time,$load_current" >> /var/www/html/dygraphs/data/load_current_data.csv
 		if [ "x$charger_busvolt" != "x" ] ; then
-			echo "$get_time,$load_busvolt,$charger_busvolt" >> /var/www/html/dygraphs/voltage_data.csv
+			echo "$get_time,$load_busvolt,$charger_busvolt" >> /var/www/html/dygraphs/data/voltage_data.csv
 			echo "save:[$get_time,$load_busvolt,$charger_busvolt]"
 		fi
 	fi
 
 	if [ "x$charger_busvolt" != "x" ] && [ "x$charger_current" != "x" ] ; then
-		echo "$get_time,$charger_busvolt" >> /var/www/html/dygraphs/charger_voltage_data.csv
-		echo "$get_time,$charger_current" >> /var/www/html/dygraphs/charger_current_data.csv
+		echo "$get_time,$charger_busvolt" >> /var/www/html/dygraphs/data/charger_voltage_data.csv
+		echo "$get_time,$charger_current" >> /var/www/html/dygraphs/data/charger_current_data.csv
 		if [ "x$load_current" != "x" ] ; then
-			echo "$get_time,$load_current,$charger_current" >> /var/www/html/dygraphs/current_data.csv
+			echo "$get_time,$load_current,$charger_current" >> /var/www/html/dygraphs/data/current_data.csv
 			echo "save:[$get_time,$load_current,$charger_current]"
 		fi
 	fi
 
 	if [ "x$wbh" != "x" ] ; then
-		echo "$get_time,$wbh" >> /var/www/html/dygraphs/wbh_data.csv
+		echo "$get_time,$wbh" >> /var/www/html/dygraphs/data/wbh_data.csv
 	fi
 
 	if [ "x$wbp" != "x" ] ; then
-		echo "$get_time,$wbp" >> /var/www/html/dygraphs/wbp_data.csv
+		echo "$get_time,$wbp" >> /var/www/html/dygraphs/data/wbp_data.csv
 	fi
 
 	if [ "x$wbt" != "x" ] ; then
-		echo "$get_time,$wbt" >> /var/www/html/dygraphs/wbt_data.csv
+		echo "$get_time,$wbt" >> /var/www/html/dygraphs/data/wbt_data.csv
 	fi
 done
