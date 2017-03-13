@@ -10,6 +10,7 @@ run () {
 	wbt_min="140"
 	wbt_max="-100"
 	day="40"
+	wbt_min_error="-100"
 
 	# Loop
 	while [ 1 ];
@@ -61,6 +62,12 @@ run () {
 
 		if [ "x$wbp" != "x" ] ; then
 			echo "$get_time,$wbp" >> /var/www/html/dygraphs/data/wbp_data.csv
+		fi
+
+		if [ "x$wbt" != "x" ] ; then
+			if [ 1 -eq "$(echo "${wbt} < ${wbt_min_error}" | bc)" ] ; then
+				unset wbt
+			fi
 		fi
 
 		if [ "x$wbt" != "x" ] ; then
