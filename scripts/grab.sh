@@ -4,6 +4,8 @@ lockfile=/tmp/cron.lock
 
 wdir="/var/www/html/dygraphs/data"
 
+day=$(env TZ=America/North_Dakota/Center date +"%d")
+
 new_day () {
 	day=${get_day}
 	wbt_max=${wbt}
@@ -28,7 +30,6 @@ run () {
 
 	wbt_min="140"
 	wbt_max="-100"
-	day="40"
 	wbt_min_error="-100"
 
 	# Loop
