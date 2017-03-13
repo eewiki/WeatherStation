@@ -2,6 +2,25 @@
 
 lockfile=/tmp/cron.lock
 
+wdir="/var/www/html/dygraphs/data"
+
+new_day () {
+	day=${get_day}
+	wbt_max=${wbt}
+	wbt_min=${wbt}
+	awk '!(NR%2)' ${wdir}/load_voltage_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/load_voltage_data.csv
+	awk '!(NR%2)' ${wdir}/load_current_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/load_current_data.csv
+	awk '!(NR%2)' ${wdir}/voltage_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/voltage_data.csv
+
+	awk '!(NR%2)' ${wdir}/charger_voltage_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/charger_voltage_data.csv
+	awk '!(NR%2)' ${wdir}/charger_current_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/charger_current_data.csv
+	awk '!(NR%2)' ${wdir}/current_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/current_data.csv
+
+	awk '!(NR%2)' ${wdir}/wbh_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/wbh_data.csv
+	awk '!(NR%2)' ${wdir}/wbp_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/wbp_data.csv
+	awk '!(NR%2)' ${wdir}/wbt_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/wbt_data.csv
+}
+
 run () {
 	port="/dev/ttyUSB0"
 
@@ -36,31 +55,31 @@ run () {
 		get_day=$(env TZ=America/North_Dakota/Center date +"%d")
 
 		if [ "x$load_busvolt" != "x" ] && [ "x$load_current" != "x" ] ; then
-			echo "$get_time,$load_busvolt" >> /var/www/html/dygraphs/data/load_voltage_data.csv
-			echo "$get_time,$load_current" >> /var/www/html/dygraphs/data/load_current_data.csv
+			echo "$get_time,$load_busvolt" >> ${wdir}/load_voltage_data.csv
+			echo "$get_time,$load_current" >> ${wdir}/load_current_data.csv
 			if [ "x$charger_busvolt" != "x" ] ; then
-				echo "$get_time,$load_busvolt,$charger_busvolt" >> /var/www/html/dygraphs/data/voltage_data.csv
+				echo "$get_time,$load_busvolt,$charger_busvolt" >> ${wdir}/voltage_data.csv
 				echo "save:[$get_time,$load_busvolt,$charger_busvolt]"
 			fi
 		fi
 
 		if [ "x$charger_busvolt" != "x" ] && [ "x$charger_current" != "x" ] ; then
-			echo "$get_time,$charger_busvolt" >> /var/www/html/dygraphs/data/charger_voltage_data.csv
-			echo "$get_time,$charger_current" >> /var/www/html/dygraphs/data/charger_current_data.csv
+			echo "$get_time,$charger_busvolt" >> ${wdir}/charger_voltage_data.csv
+			echo "$get_time,$charger_current" >> ${wdir}/charger_current_data.csv
 			if [ "x$load_current" != "x" ] ; then
-				echo "$get_time,$load_current,$charger_current" >> /var/www/html/dygraphs/data/current_data.csv
+				echo "$get_time,$load_current,$charger_current" >> ${wdir}/current_data.csv
 				echo "save:[$get_time,$load_current,$charger_current]"
 			fi
 		fi
 
 		if [ "x$wbh" != "x" ] ; then
 			echo "wbh=[$wbh]"
-			echo "$get_time,$wbh" >> /var/www/html/dygraphs/data/wbh_data.csv
+			echo "$get_time,$wbh" >> ${wdir}/wbh_data.csv
 		fi
 
 		if [ "x$wbp" != "x" ] ; then
 			echo "wbp=[$wbp]"
-			echo "$get_time,$wbp" >> /var/www/html/dygraphs/data/wbp_data.csv
+			echo "$get_time,$wbp" >> ${wdir}/wbp_data.csv
 		fi
 
 		if [ "x$wbt" != "x" ] ; then
@@ -71,12 +90,10 @@ run () {
 
 		if [ "x$wbt" != "x" ] ; then
 			echo "wbt=[$wbt]"
-			echo "$get_time,$wbt" >> /var/www/html/dygraphs/data/wbt_data.csv
+			echo "$get_time,$wbt" >> ${wdir}/wbt_data.csv
 
 			if [ "x${get_day}" != "x${day}" ] ; then
-				day=${get_day}
-				wbt_max=${wbt}
-				wbt_min=${wbt}
+				new_day
 			fi
 
 			if [ 1 -eq "$(echo "${wbt} < ${wbt_min}" | bc)" ] ; then
@@ -91,7 +108,7 @@ run () {
 		fi
 
 		if [ "x$wbh" != "x" ] && [ "x$wbp" != "x" ] && [ "x$wbt" != "x" ] ; then
-			wfile="/var/www/html/dygraphs/data/current.xml"
+			wfile="${wdir}/current.xml"
 			echo "<current>" > ${wfile}
 			echo "    <temperature value=\"$wbt\" min=\"$wbt_min\" max=\"$wbt_max\" unit=\"fahrenheit\"/>" >> ${wfile}
 			echo "    <humidity value=\"$wbh\" unit=\"%\">" >> ${wfile}
