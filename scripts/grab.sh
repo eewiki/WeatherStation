@@ -28,11 +28,8 @@ run () {
 		echo "charger_current=[$charger_current]"
 
 		wbh=$(echo $READ | sed 's/ /\n/g' | grep '$WBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
-		echo "wbh=[$wbh]"
 		wbp=$(echo $READ | sed 's/ /\n/g' | grep '$WBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
-		echo "wbp=[$wbp]"
 		wbt=$(echo $READ | sed 's/ /\n/g' | grep '$WBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
-		echo "wbt=[$wbt]"
 
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 		get_time_weather=$(env TZ=America/North_Dakota/Center date +"%Y-%m-%dT%k:%M:%S")
@@ -57,10 +54,12 @@ run () {
 		fi
 
 		if [ "x$wbh" != "x" ] ; then
+			echo "wbh=[$wbh]"
 			echo "$get_time,$wbh" >> /var/www/html/dygraphs/data/wbh_data.csv
 		fi
 
 		if [ "x$wbp" != "x" ] ; then
+			echo "wbp=[$wbp]"
 			echo "$get_time,$wbp" >> /var/www/html/dygraphs/data/wbp_data.csv
 		fi
 
@@ -71,6 +70,7 @@ run () {
 		fi
 
 		if [ "x$wbt" != "x" ] ; then
+			echo "wbt=[$wbt]"
 			echo "$get_time,$wbt" >> /var/www/html/dygraphs/data/wbt_data.csv
 
 			if [ "x${get_day}" != "x${day}" ] ; then
