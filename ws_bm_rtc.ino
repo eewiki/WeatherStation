@@ -69,10 +69,10 @@ void loop () {
 	busvoltage_B = ina219_B.getBusVoltage_V();
 	current_mA_B = ina219_B.getCurrent_mA();
 
-	// wake up the XBee
-	pinMode(XBee_wake, OUTPUT);
-	digitalWrite(XBee_wake, LOW);
-	delay(ws_short_delay);
+//	// wake up the XBee
+//	pinMode(XBee_wake, OUTPUT);
+//	digitalWrite(XBee_wake, LOW);
+//	delay(ws_short_delay);
 
 	Serial.print("$DATE:");
 	Serial.print(now.year(), DEC);
@@ -136,9 +136,9 @@ void loop () {
 	Serial.println("");
 	delay(ws_short_delay);
 
-	// put the XBee to sleep
-	pinMode(XBee_wake, INPUT); // put pin in a high impedence state
-	digitalWrite(XBee_wake, HIGH);
+//	// put the XBee to sleep
+//	pinMode(XBee_wake, INPUT); // put pin in a high impedence state
+//	digitalWrite(XBee_wake, HIGH);
 
 	LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
 }
