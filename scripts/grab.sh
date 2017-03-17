@@ -32,6 +32,8 @@ run () {
 	wbt_max="-100"
 	wbt_min_error="-100"
 
+	wbh_max="100"
+
 	# Loop
 	while [ 1 ];
 	do
@@ -74,6 +76,10 @@ run () {
 		fi
 
 		if [ "x$wbh" != "x" ] ; then
+			if [ 1 -eq "$(echo "${wbh} > ${wbh_max}" | bc)" ] ; then
+				wbh=${wbh_max}
+			fi
+
 			echo "wbh=[$wbh]"
 			echo "$get_time,$wbh" >> ${wdir}/wbh_data.csv
 		fi
