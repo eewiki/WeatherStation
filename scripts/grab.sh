@@ -5,22 +5,31 @@ lockfile=/tmp/cron.lock
 wdir="/var/www/html/dygraphs/data"
 
 day=$(env TZ=America/North_Dakota/Center date +"%d")
+day_filter=$(env TZ=America/North_Dakota/Center date +"%m/%d" --date="7 days ago")
+
+seven_day () {
+	cat ${wdir}/${wfile} | grep -v '$day_filter' > /tmp/temp.csv && mv /tmp/temp.csv ${wdir}/${wfile}
+}
+
+cut_half () {
+	awk '!(NR%2)' ${wdir}/${wfile} > /tmp/temp.csv && mv /tmp/temp.csv ${wdir}/${wfile}
+}
 
 new_day () {
 	day=${get_day}
 	wbt_max=${wbt}
 	wbt_min=${wbt}
-	awk '!(NR%2)' ${wdir}/load_voltage_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/load_voltage_data.csv
-	awk '!(NR%2)' ${wdir}/load_current_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/load_current_data.csv
-	awk '!(NR%2)' ${wdir}/voltage_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/voltage_data.csv
+	wfile="load_voltage_data.csv" ; seven_day ; cut_half
+	wfile="load_current_data.csv" ; seven_day ; cut_half
+	wfile="voltage_data.csv" ; seven_day ; cut_half
 
-	awk '!(NR%2)' ${wdir}/charger_voltage_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/charger_voltage_data.csv
-	awk '!(NR%2)' ${wdir}/charger_current_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/charger_current_data.csv
-	awk '!(NR%2)' ${wdir}/current_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/current_data.csv
+	wfile="charger_voltage_data.csv" ; seven_day ; cut_half
+	wfile="charger_current_data.csv" ; seven_day ; cut_half
+	wfile="current_data.csv" ; seven_day ; cut_half
 
-	awk '!(NR%2)' ${wdir}/wbh_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/wbh_data.csv
-	awk '!(NR%2)' ${wdir}/wbp_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/wbp_data.csv
-	awk '!(NR%2)' ${wdir}/wbt_data.csv > ${wdir}/temp.csv && mv ${wdir}/temp.csv ${wdir}/wbt_data.csv
+	wfile="wbh_data.csv" ; seven_day ; cut_half
+	wfile="wbp_data.csv" ; seven_day ; cut_half
+	wfile="wbt_data.csv" ; seven_day ; cut_half
 }
 
 run () {
