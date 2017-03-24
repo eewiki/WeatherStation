@@ -7,7 +7,7 @@ wdir="/var/www/html/dygraphs/data"
 day_filter=$(env TZ=America/North_Dakota/Center date +"%m/%d" --date="14 days ago")
 
 seven_day () {
-	cat ${wdir}/${wfile} | grep -v '$day_filter' > /tmp/temp.csv && mv /tmp/temp.csv ${wdir}/${wfile}
+	cat ${wdir}/${wfile} | grep -v '${day_filter}' > /tmp/temp.csv && mv /tmp/temp.csv ${wdir}/${wfile}
 }
 
 new_day () {
