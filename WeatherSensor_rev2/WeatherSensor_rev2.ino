@@ -34,10 +34,10 @@ long lastSecond; //The millis counter to see when a second rolls by
 
 void setup()
 {
-	wdt_enable(WDTO_8S);
+	//wdt_enable(WDTO_8S);
 
-	Serial.begin(57600);
-	Serial.println("Weather Shield Example");
+	Serial1.begin(57600);
+	Serial1.println("Weather Shield Example");
 
 	pinMode(STAT_BLUE, OUTPUT); //Status LED Blue
 	pinMode(STAT_GREEN, OUTPUT); //Status LED Green
@@ -55,7 +55,7 @@ void setup()
 
 	lastSecond = millis();
 
-	Serial.println("Weather Shield online!");
+	Serial1.println("Weather Shield online!");
 }
 
 void loop()
@@ -72,49 +72,49 @@ void loop()
 
 		lastSecond += 10000;
 
-		watchdog_counter = 0;
+		//watchdog_counter = 0;
 		endofline = 0;
-		power_all_enable();
-		delay(5);
+		//power_all_enable();
+		//delay(5);
 
 		//Check Pressure Sensor
 		float pressure = myPressure.readPressure();
 
-		Serial.print("$WBP:");
-		Serial.print(counter);
-		Serial.print(":Pres:");
-		Serial.print(pressure);
-		Serial.println("Pa*");
+		Serial1.print("$WBP:");
+		Serial1.print(counter);
+		Serial1.print(":Pres:");
+		Serial1.print(pressure);
+		Serial1.println("Pa*");
 
 		//Check Temperature Sensor
 		float tempc = sensor.readTemperature();
 		if (tempc <= 100) {
 			float tempf = ((tempc * 1.8)+32);
-			Serial.print("$WBT:");
-			Serial.print(counter);
-			Serial.print(":TempF:");
-			Serial.print(tempf, 2);
-			Serial.println("F*");
+			Serial1.print("$WBT:");
+			Serial1.print(counter);
+			Serial1.print(":TempF:");
+			Serial1.print(tempf, 2);
+			Serial1.println("F*");
 			endofline=1;
 		} else {
-			Serial.println("WBT:FAILURE");
+			Serial1.println("WBT:FAILURE");
 		}
 
 		//Check Humidity Sensor
 		float humidity = sensor.readHumidity();
 		if (humidity <= 100) {
-			Serial.print("$WBH:");
-			Serial.print(counter);
-			Serial.print(":Humid:");
-			Serial.print(humidity);
-			Serial.println("P*");
+			Serial1.print("$WBH:");
+			Serial1.print(counter);
+			Serial1.print(":Humid:");
+			Serial1.print(humidity);
+			Serial1.println("P*");
 			endofline=1;
 		} else {
-			Serial.println("WBH:FAILURE");
+			Serial1.println("WBH:FAILURE");
 		}
 
 		if ( endofline == 1) {
-			Serial.println("");
+			Serial1.println("");
 		}
 
 		counter++;
@@ -129,15 +129,15 @@ void loop()
 	delay(100);
 }
 
-void goto_sleep()
-{
-	//power_all_disable();
-	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-	sleep_mode();
-}
+//void goto_sleep()
+//{
+//	//power_all_disable();
+//	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+//	sleep_mode();
+//}
 
-ISR(WDT_vect)
-{
-	watchdog_counter++;
-}
+//ISR(WDT_vect)
+//{
+//	watchdog_counter++;
+//}
 
