@@ -34,10 +34,12 @@ int counter=10;
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long lastSecond; //The millis counter to see when a second rolls by
 
+const int XBee_wake = 9;
+
 void setup()
 {
-	Serial1.begin(57600);
-	Serial1.println("Weather Shield Example");
+	Serial.begin(57600);
+	Serial.println("Weather Shield Example");
 
 	pinMode(STAT_BLUE, OUTPUT); //Status LED Blue
 	pinMode(STAT_GREEN, OUTPUT); //Status LED Green
@@ -56,7 +58,7 @@ void setup()
 
 	lastSecond = millis();
 
-	Serial1.println("Weather Shield online!");
+	Serial.println("Weather Shield online!");
 }
 
 void loop()
@@ -73,7 +75,7 @@ void loop()
 
 		if (humidity == 998) //Humidty sensor failed to respond
 		{
-			Serial1.println("I2C communication to sensors is not working. Check solder connections.");
+			Serial.println("I2C communication to sensors is not working. Check solder connections.");
 
 			//Try re-initializing the I2C comm and the sensors
 			myPressure.begin(); 
@@ -82,31 +84,40 @@ void loop()
 			myPressure.enableEventFlags();
 			myHumidity.begin();
 		} else {
+
+// wake up the XBee
+pinMode(XBee_wake, OUTPUT);
+digitalWrite(XBee_wake, LOW);
+      
 			//Check Pressure Sensor
 			float pressure = myPressure.readPressure();
 
-			Serial1.print("$XWBP:");
-			Serial1.print(counter);
-			Serial1.print(":Pres:");
-			Serial1.print(pressure);
-			Serial1.println("Pa*");
+			Serial.print("$XWBP:");
+			Serial.print(counter);
+			Serial.print(":Pres:");
+			Serial.print(pressure);
+			Serial.println("Pa*");
 
 			//Check Temperature Sensor
 			float tempf = myPressure.readTempF();
-			Serial1.print("$XWBT:");
-			Serial1.print(counter);
-			Serial1.print(":TempF:");
-			Serial1.print(tempf, 2);
-			Serial1.println("F*");
+			Serial.print("$XWBT:");
+			Serial.print(counter);
+			Serial.print(":TempF:");
+			Serial.print(tempf, 2);
+			Serial.println("F*");
 
 			//Check Humidity Sensor
-			Serial1.print("$XWBH:");
-			Serial1.print(counter);
-			Serial1.print(":Humid:");
-			Serial1.print(humidity);
-			Serial1.println("P*");
+			Serial.print("$XWBH:");
+			Serial.print(counter);
+			Serial.print(":Humid:");
+			Serial.print(humidity);
+			Serial.println("P*");
 
-			Serial1.println("");
+			Serial.println("");
+
+// put the XBee to sleep
+pinMode(XBee_wake, INPUT); // put pin in a high impedence state
+digitalWrite(XBee_wake, HIGH);
 
 			counter++;
 			if (counter == 100)
