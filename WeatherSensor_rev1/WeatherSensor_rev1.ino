@@ -85,7 +85,7 @@ void loop()
 			//Check Pressure Sensor
 			float pressure = myPressure.readPressure();
 
-			Serial1.print("$WBP:");
+			Serial1.print("$XWBP:");
 			Serial1.print(counter);
 			Serial1.print(":Pres:");
 			Serial1.print(pressure);
@@ -93,14 +93,14 @@ void loop()
 
 			//Check Temperature Sensor
 			float tempf = myPressure.readTempF();
-			Serial1.print("$WBT:");
+			Serial1.print("$XWBT:");
 			Serial1.print(counter);
 			Serial1.print(":TempF:");
 			Serial1.print(tempf, 2);
 			Serial1.println("F*");
 
 			//Check Humidity Sensor
-			Serial1.print("$WBH:");
+			Serial1.print("$XWBH:");
 			Serial1.print(counter);
 			Serial1.print(":Humid:");
 			Serial1.print(humidity);

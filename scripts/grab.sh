@@ -62,6 +62,22 @@ run () {
 		wbp=$(echo $READ | sed 's/ /\n/g' | grep '$WBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
 		wbt=$(echo $READ | sed 's/ /\n/g' | grep '$WBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
 
+		xwbh=$(echo $READ | sed 's/ /\n/g' | grep '$XWBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
+		xwbp=$(echo $READ | sed 's/ /\n/g' | grep '$XWBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
+		xwbt=$(echo $READ | sed 's/ /\n/g' | grep '$XWBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
+
+		if [ "x$xwbh" != "x" ] ; then
+			echo "xwbh=[$xwbh]" >> /tmp/x.log
+		fi
+
+		if [ "x$xwbp" != "x" ] ; then
+			echo "xwbp=[$xwbp]" >> /tmp/x.log
+		fi
+
+		if [ "x$xwbt" != "x" ] ; then
+			echo "xwbp=[$xwbt]" >> /tmp/x.log
+		fi
+
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 		get_time_weather=$(env TZ=America/North_Dakota/Center date +"%Y-%m-%dT%k:%M:%S")
 		get_day=$(env TZ=America/North_Dakota/Center date +"%d")
