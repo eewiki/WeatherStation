@@ -287,3 +287,4 @@ void MPL3115A2::IIC_Write(byte regAddr, byte value)
   Wire.endTransmission(true);
 }
 
+
