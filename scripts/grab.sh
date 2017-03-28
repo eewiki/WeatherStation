@@ -75,7 +75,7 @@ run () {
 		fi
 
 		if [ "x$xwbt" != "x" ] ; then
-			echo "xwbp=[$xwbt]" >> /tmp/x.log
+			echo "xwbt=[$xwbt]" >> /tmp/x.log
 		fi
 
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")

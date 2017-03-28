@@ -24,10 +24,6 @@ HTU21D myHumidity; //Create an instance of the humidity sensor
 const byte STAT_BLUE = 7;
 const byte STAT_GREEN = 8;
 
-const byte REFERENCE_3V3 = A3;
-const byte LIGHT = A1;
-const byte BATT = A2;
-
 int counter=10;
 
 //Global Variables
@@ -43,9 +39,6 @@ void setup()
 
 	pinMode(STAT_BLUE, OUTPUT); //Status LED Blue
 	pinMode(STAT_GREEN, OUTPUT); //Status LED Green
-
-	pinMode(REFERENCE_3V3, INPUT);
-	pinMode(LIGHT, INPUT);
 
 	//Configure the pressure sensor
 	myPressure.begin(); // Get sensor online
@@ -85,10 +78,10 @@ void loop()
 			myHumidity.begin();
 		} else {
 
-// wake up the XBee
-pinMode(XBee_wake, OUTPUT);
-digitalWrite(XBee_wake, LOW);
-      
+			// wake up the XBee
+			pinMode(XBee_wake, OUTPUT);
+			digitalWrite(XBee_wake, LOW);
+
 			//Check Pressure Sensor
 			float pressure = myPressure.readPressure();
 
@@ -115,9 +108,9 @@ digitalWrite(XBee_wake, LOW);
 
 			Serial.println("");
 
-// put the XBee to sleep
-pinMode(XBee_wake, INPUT); // put pin in a high impedence state
-digitalWrite(XBee_wake, HIGH);
+			// put the XBee to sleep
+			pinMode(XBee_wake, INPUT); // put pin in a high impedence state
+			digitalWrite(XBee_wake, HIGH);
 
 			counter++;
 			if (counter == 100)
