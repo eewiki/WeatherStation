@@ -19,18 +19,10 @@ const int XBee_wake = 9;
 float shuntvoltage_A = 0;
 float busvoltage_A = 0;
 float current_mA_A = 0;
-float loadvoltage_A = 0;
 
 float shuntvoltage_B = 0;
 float busvoltage_B = 0;
 float current_mA_B = 0;
-float loadvoltage_B = 0;
-
-//with xbee on
-float shuntvoltage_C = 0;
-float busvoltage_C = 0;
-float current_mA_C = 0;
-float loadvoltage_C = 0;
 
 void setup () {
 	//clock_prescale_set(clock_div_4);
@@ -57,7 +49,6 @@ void loop () {
 	//Print readings every second
 	if (millis() - lastSecond >= 10000)
 	{
-
 		lastSecond += 10000;
 
 		shuntvoltage_A = ina219_A.getShuntVoltage_mV();
@@ -84,10 +75,6 @@ void loop () {
 		Serial.print(current_mA_A);
 		Serial.println("mA*");
 
-		shuntvoltage_C = ina219_A.getShuntVoltage_mV();
-		busvoltage_C = ina219_A.getBusVoltage_V();
-		current_mA_C = ina219_A.getCurrent_mA();
-
 		Serial.print("$CHARGER:");
 		Serial.print(counter);
 		Serial.print(":BusVolt:");
@@ -98,18 +85,6 @@ void loop () {
 		Serial.print(counter);
 		Serial.print(":Current:");
 		Serial.print(current_mA_B);
-		Serial.println("mA*");
-
-		Serial.print("$LOADXB:");
-		Serial.print(counter);
-		Serial.print(":BusVolt:");
-		Serial.print(busvoltage_C);
-		Serial.println("V*");
-
-		Serial.print("$LOADXB:");
-		Serial.print(counter);
-		Serial.print(":Current:");
-		Serial.print(current_mA_C);
 		Serial.println("mA*");
 		Serial.println("");
 
