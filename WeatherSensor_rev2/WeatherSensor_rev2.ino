@@ -22,28 +22,23 @@ MPL3115A2 myPressure; //Create an instance of the pressure sensor
 const byte STAT_BLUE = 7;
 const byte STAT_GREEN = 8;
 
-const byte REFERENCE_3V3 = A3;
-const byte LIGHT = A1;
-const byte BATT = A2;
-
 int counter=10;
 
 //Global Variables
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long lastSecond; //The millis counter to see when a second rolls by
 
+const int XBee_wake = 9;
+
 void setup()
 {
 	//wdt_enable(WDTO_8S);
 
-	Serial1.begin(57600);
-	Serial1.println("Weather Shield Example");
+	Serial.begin(57600);
+	Serial.println("Weather Shield Example");
 
 	pinMode(STAT_BLUE, OUTPUT); //Status LED Blue
 	pinMode(STAT_GREEN, OUTPUT); //Status LED Green
-
-	pinMode(REFERENCE_3V3, INPUT);
-	pinMode(LIGHT, INPUT);
 
 	//Configure the pressure sensor
 	myPressure.begin(); // Get sensor online
@@ -55,7 +50,7 @@ void setup()
 
 	lastSecond = millis();
 
-	Serial1.println("Weather Shield online!");
+	Serial.println("Weather Shield online!");
 }
 
 void loop()
@@ -77,45 +72,53 @@ void loop()
 		//power_all_enable();
 		//delay(5);
 
+		// wake up the XBee
+		pinMode(XBee_wake, OUTPUT);
+		digitalWrite(XBee_wake, LOW);
+
 		//Check Pressure Sensor
 		float pressure = myPressure.readPressure();
 
-		Serial1.print("$WBP:");
-		Serial1.print(counter);
-		Serial1.print(":Pres:");
-		Serial1.print(pressure);
-		Serial1.println("Pa*");
+		Serial.print("$WBP:");
+		Serial.print(counter);
+		Serial.print(":Pres:");
+		Serial.print(pressure);
+		Serial.println("Pa*");
 
 		//Check Temperature Sensor
 		float tempc = sensor.readTemperature();
 		if (tempc <= 100) {
 			float tempf = ((tempc * 1.8)+32);
-			Serial1.print("$WBT:");
-			Serial1.print(counter);
-			Serial1.print(":TempF:");
-			Serial1.print(tempf, 2);
-			Serial1.println("F*");
+			Serial.print("$WBT:");
+			Serial.print(counter);
+			Serial.print(":TempF:");
+			Serial.print(tempf, 2);
+			Serial.println("F*");
 			endofline=1;
 		} else {
-			Serial1.println("WBT:FAILURE");
+			Serial.println("WBT:FAILURE");
 		}
 
 		//Check Humidity Sensor
 		float humidity = sensor.readHumidity();
 		if (humidity <= 100) {
-			Serial1.print("$WBH:");
-			Serial1.print(counter);
-			Serial1.print(":Humid:");
-			Serial1.print(humidity);
-			Serial1.println("P*");
+			Serial.print("$WBH:");
+			Serial.print(counter);
+			Serial.print(":Humid:");
+			Serial.print(humidity);
+			Serial.println("P*");
 			endofline=1;
 		} else {
-			Serial1.println("WBH:FAILURE");
+			Serial.println("WBH:FAILURE");
 		}
 
 		if ( endofline == 1) {
-			Serial1.println("");
+			Serial.println("");
 		}
+
+		// put the XBee to sleep
+		pinMode(XBee_wake, INPUT); // put pin in a high impedence state
+		digitalWrite(XBee_wake, HIGH);
 
 		counter++;
 		if (counter == 100)
@@ -128,16 +131,4 @@ void loop()
 
 	delay(100);
 }
-
-//void goto_sleep()
-//{
-//	//power_all_disable();
-//	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-//	sleep_mode();
-//}
-
-//ISR(WDT_vect)
-//{
-//	watchdog_counter++;
-//}
 
