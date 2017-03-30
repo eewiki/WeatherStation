@@ -48,23 +48,23 @@ run () {
 	do
 		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "$" -q "^\n"`
 		echo "[$READ]"
-		load_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '$LOAD:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
+		load_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '^$LOAD:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
 		echo "load_busvolt=[$load_busvolt]"
-		load_current=$(echo $READ | sed 's/ /\n/g' | grep '$LOAD:' | grep Current | tail -1 | awk -F ':' '{print $4}' | awk -F 'mA*' '{print $1}' || true)
+		load_current=$(echo $READ | sed 's/ /\n/g' | grep '^$LOAD:' | grep Current | tail -1 | awk -F ':' '{print $4}' | awk -F 'mA*' '{print $1}' || true)
 		echo "load_current=[$load_current]"
 
-		charger_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '$CHARGER:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
+		charger_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '^$CHARGER:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
 		echo "charger_busvolt=[$charger_busvolt]"
-		charger_current=$(echo $READ | sed 's/ /\n/g' | grep '$CHARGER:' | grep Current | tail -1 | awk -F ':' '{print $4}' | awk -F 'mA*' '{print $1}' || true)
+		charger_current=$(echo $READ | sed 's/ /\n/g' | grep '^$CHARGER:' | grep Current | tail -1 | awk -F ':' '{print $4}' | awk -F 'mA*' '{print $1}' || true)
 		echo "charger_current=[$charger_current]"
 
-		wbh=$(echo $READ | sed 's/ /\n/g' | grep '$WBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
-		wbp=$(echo $READ | sed 's/ /\n/g' | grep '$WBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
-		wbt=$(echo $READ | sed 's/ /\n/g' | grep '$WBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
+		wbh=$(echo $READ | sed 's/ /\n/g' | grep '^$WBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
+		wbp=$(echo $READ | sed 's/ /\n/g' | grep '^$WBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
+		wbt=$(echo $READ | sed 's/ /\n/g' | grep '^$WBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
 
-		xwbh=$(echo $READ | sed 's/ /\n/g' | grep '$XWBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
-		xwbp=$(echo $READ | sed 's/ /\n/g' | grep '$XWBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
-		xwbt=$(echo $READ | sed 's/ /\n/g' | grep '$XWBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
+		xwbh=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
+		xwbp=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
+		xwbt=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
 
 		if [ "x$xwbh" != "x" ] ; then
 			echo "xwbh=[$xwbh]" >> /tmp/x.log
