@@ -12,6 +12,12 @@ Adafruit_INA219 ina219_B(0x44);
 
 int counter=10;
 
+#define RELAY_UNDEF		0
+#define RELAY_A0_ON		1
+#define RELAY_A1_ON		2
+
+int relay_mode=RELAY_UNDEF;
+
 long lastSecond; //The millis counter to see when a second rolls by
 
 const int XBee_wake = 9;
@@ -43,13 +49,27 @@ void setup () {
 	Serial.println("Measuring voltage and current with INA219 ...");
 
 	lastSecond = millis();
+
+	//Turn off
+	pinMode(A0, OUTPUT);
+	digitalWrite(A0, LOW);
+
+	pinMode(A1, OUTPUT);
+	digitalWrite(A1, HIGH);
+
+	delay(10);
+
+	pinMode(A1, OUTPUT);
+	digitalWrite(A1, LOW);
+
+	relay_mode=RELAY_A1_ON;
 }
 
 void loop () {
 	//Print readings every second
-	if (millis() - lastSecond >= 10000)
+	if (millis() - lastSecond >= 7000)
 	{
-		lastSecond += 10000;
+		lastSecond += 7000;
 
 		shuntvoltage_A = ina219_A.getShuntVoltage_mV();
 		busvoltage_A = ina219_A.getBusVoltage_V();
@@ -91,6 +111,28 @@ void loop () {
 		// put the XBee to sleep
 		pinMode(XBee_wake, INPUT); // put pin in a high impedence state
 		digitalWrite(XBee_wake, HIGH);
+
+		//Turn on
+		if ( relay_mode == RELAY_A1_ON ) {
+			if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
+				pinMode(A0, OUTPUT);
+				digitalWrite(A0, HIGH);
+				delay(10);
+				digitalWrite(A0, LOW);
+				relay_mode = RELAY_A0_ON;
+			}
+		}
+
+		//Turn off
+		if ( relay_mode == RELAY_A0_ON ) {
+			if ( busvoltage_A < 12.3 ) {
+				pinMode(A1, OUTPUT);
+				digitalWrite(A1, HIGH);
+				delay(10);
+				digitalWrite(A1, LOW);
+				relay_mode = RELAY_A1_ON;
+			}
+		}
 
 		counter++;
 		if (counter == 100)
