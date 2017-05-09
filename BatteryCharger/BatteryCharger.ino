@@ -65,6 +65,22 @@ void setup () {
 	relay_mode=RELAY_A1_ON;
 }
 
+void turnon(){
+	pinMode(A0, OUTPUT);
+	digitalWrite(A0, HIGH);
+	delay(10);
+	digitalWrite(A0, LOW);
+	relay_mode = RELAY_A0_ON;
+}
+
+void turnoff(){
+	pinMode(A1, OUTPUT);
+	digitalWrite(A1, HIGH);
+	delay(10);
+	digitalWrite(A1, LOW);
+	relay_mode = RELAY_A1_ON;
+}
+
 void loop () {
 	//Print readings every second
 	if (millis() - lastSecond >= 7000)
@@ -114,23 +130,21 @@ void loop () {
 
 		//Turn on
 		if ( relay_mode == RELAY_A1_ON ) {
-			if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
-				pinMode(A0, OUTPUT);
-				digitalWrite(A0, HIGH);
-				delay(10);
-				digitalWrite(A0, LOW);
-				relay_mode = RELAY_A0_ON;
+			if ( busvoltage_A > 13 ) {
+				turnon;
+			}
+			else if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
+				turnon;
 			}
 		}
 
 		//Turn off
 		if ( relay_mode == RELAY_A0_ON ) {
-			if ( busvoltage_A < 12.3 ) {
-				pinMode(A1, OUTPUT);
-				digitalWrite(A1, HIGH);
-				delay(10);
-				digitalWrite(A1, LOW);
-				relay_mode = RELAY_A1_ON;
+			if ( busvoltage_A < 12.1 ) {
+				turnoff;
+			}
+			else if (( current_mA_A > 100 ) && ( current_mA_A < 200 )) {
+				turnon;
 			}
 		}
 
