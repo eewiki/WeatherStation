@@ -130,10 +130,10 @@ void loop () {
 
 		//Turn on
 		if ( relay_mode == RELAY_A1_ON ) {
-			if ( busvoltage_A > 13 ) {
+			if ( busvoltage_A > 13.1 ) {
 				turnon;
 			}
-			else if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
+			if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
 				turnon;
 			}
 		}
@@ -143,9 +143,9 @@ void loop () {
 			if ( busvoltage_A < 12.1 ) {
 				turnoff;
 			}
-			else if (( current_mA_A > 100 ) && ( current_mA_A < 200 )) {
-				turnon;
-			}
+//			else if (( current_mA_A > 100 ) && ( current_mA_A < 200 )) {
+//				turnoff;
+//			}
 		}
 
 		counter++;
