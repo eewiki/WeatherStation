@@ -16,7 +16,7 @@ int counter=10;
 #define RELAY_A0_ON		1
 #define RELAY_A1_ON		2
 
-int relay_mode=RELAY_UNDEF;
+volatile int relay_mode=RELAY_UNDEF;
 
 long lastSecond; //The millis counter to see when a second rolls by
 
@@ -63,22 +63,6 @@ void setup () {
 	digitalWrite(A1, LOW);
 
 	relay_mode=RELAY_A1_ON;
-}
-
-void turnon(){
-	pinMode(A0, OUTPUT);
-	digitalWrite(A0, HIGH);
-	delay(10);
-	digitalWrite(A0, LOW);
-	relay_mode = RELAY_A0_ON;
-}
-
-void turnoff(){
-	pinMode(A1, OUTPUT);
-	digitalWrite(A1, HIGH);
-	delay(10);
-	digitalWrite(A1, LOW);
-	relay_mode = RELAY_A1_ON;
 }
 
 void loop () {
@@ -131,20 +115,34 @@ void loop () {
 		//Turn on
 		if ( relay_mode == RELAY_A1_ON ) {
 			if ( busvoltage_A > 13.1 ) {
-				turnon;
+				pinMode(A0, OUTPUT);
+				digitalWrite(A0, HIGH);
+				delay(10);
+				digitalWrite(A0, LOW);
+				relay_mode = RELAY_A0_ON;
 			}
+		}
+		//Turn on
+		if ( relay_mode == RELAY_A1_ON ) {
 			if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
-				turnon;
+				pinMode(A0, OUTPUT);
+				digitalWrite(A0, HIGH);
+				delay(10);
+				digitalWrite(A0, LOW);
+				relay_mode = RELAY_A0_ON;
 			}
 		}
 
 		//Turn off
 		if ( relay_mode == RELAY_A0_ON ) {
 			if ( busvoltage_A < 12.1 ) {
-				turnoff;
+				pinMode(A1, OUTPUT);
+				digitalWrite(A1, HIGH);
+				delay(10);
+				digitalWrite(A1, LOW);
+				relay_mode = RELAY_A1_ON;
 			}
 //			else if (( current_mA_A > 100 ) && ( current_mA_A < 200 )) {
-//				turnoff;
 //			}
 		}
 
