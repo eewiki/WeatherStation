@@ -142,8 +142,14 @@ void loop () {
 				digitalWrite(A1, LOW);
 				relay_mode = RELAY_A1_ON;
 			}
-//			else if (( current_mA_A > 100 ) && ( current_mA_A < 200 )) {
-//			}
+			//Weird Bug state (bbxm crashed)
+			if (( current_mA_A > 140 ) && ( current_mA_A < 160 )) {
+				pinMode(A1, OUTPUT);
+				digitalWrite(A1, HIGH);
+				delay(10);
+				digitalWrite(A1, LOW);
+				relay_mode = RELAY_A1_ON;
+			}
 		}
 
 		counter++;
