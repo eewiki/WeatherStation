@@ -114,7 +114,8 @@ void loop () {
 
 		//Turn on
 		if ( relay_mode == RELAY_A1_ON ) {
-			if ( busvoltage_A > 13.1 ) {
+//			if ( busvoltage_A > 13.1 ) {
+			if ( busvoltage_A > 12.6 ) {
 				pinMode(A0, OUTPUT);
 				digitalWrite(A0, HIGH);
 				delay(10);
@@ -123,19 +124,21 @@ void loop () {
 			}
 		}
 		//Turn on
-		if ( relay_mode == RELAY_A1_ON ) {
-			if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
-				pinMode(A0, OUTPUT);
-				digitalWrite(A0, HIGH);
-				delay(10);
-				digitalWrite(A0, LOW);
-				relay_mode = RELAY_A0_ON;
-			}
-		}
+//testing
+//		if ( relay_mode == RELAY_A1_ON ) {
+//			if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
+//				pinMode(A0, OUTPUT);
+//				digitalWrite(A0, HIGH);
+//				delay(10);
+//				digitalWrite(A0, LOW);
+//				relay_mode = RELAY_A0_ON;
+//			}
+//		}
 
 		//Turn off
 		if ( relay_mode == RELAY_A0_ON ) {
-			if ( busvoltage_A < 12.1 ) {
+			//http://www.kendrickastro.com/lvc.html
+			if ( busvoltage_A < 11.7 ) {
 				pinMode(A1, OUTPUT);
 				digitalWrite(A1, HIGH);
 				delay(10);

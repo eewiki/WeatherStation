@@ -19,17 +19,17 @@ new_day () {
 	day=${get_day}
 	wbt_max=${wbt}
 	wbt_min=${wbt}
-	wfile="load_voltage_data.csv" ; seven_day ; cut_half
-	wfile="load_current_data.csv" ; seven_day ; cut_half
-	wfile="voltage_data.csv" ; seven_day ; cut_half
+#	wfile="load_voltage_data.csv" ; seven_day ; cut_half
+#	wfile="load_current_data.csv" ; seven_day ; cut_half
+#	wfile="voltage_data.csv" ; seven_day ; cut_half
 
-	wfile="charger_voltage_data.csv" ; seven_day ; cut_half
-	wfile="charger_current_data.csv" ; seven_day ; cut_half
-	wfile="current_data.csv" ; seven_day ; cut_half
+#	wfile="charger_voltage_data.csv" ; seven_day ; cut_half
+#	wfile="charger_current_data.csv" ; seven_day ; cut_half
+#	wfile="current_data.csv" ; seven_day ; cut_half
 
-	wfile="wbh_data.csv" ; seven_day ; cut_half
-	wfile="wbp_data.csv" ; seven_day ; cut_half
-	wfile="wbt_data.csv" ; seven_day ; cut_half
+#	wfile="wbh_data.csv" ; seven_day ; cut_half
+#	wfile="wbp_data.csv" ; seven_day ; cut_half
+#	wfile="wbt_data.csv" ; seven_day ; cut_half
 }
 
 run () {
