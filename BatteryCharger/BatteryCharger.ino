@@ -137,8 +137,8 @@ void loop () {
 
 		//Turn off
 		if ( relay_mode == RELAY_A0_ON ) {
-			//http://www.kendrickastro.com/lvc.html
-			if ( busvoltage_A < 11.7 ) {
+			//http://www.kendrickastro.com/lvc.html (11.7)
+			if ( busvoltage_A < 12.2 ) {
 				pinMode(A1, OUTPUT);
 				digitalWrite(A1, HIGH);
 				delay(10);
