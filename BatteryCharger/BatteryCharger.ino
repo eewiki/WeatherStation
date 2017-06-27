@@ -113,16 +113,15 @@ void loop () {
 		digitalWrite(XBee_wake, HIGH);
 
 		//Turn on
-//Testing
-//		if ( relay_mode == RELAY_A1_ON ) {
-//			if ( busvoltage_A > 13.1 ) {
-//				pinMode(A0, OUTPUT);
-//				digitalWrite(A0, HIGH);
-//				delay(10);
-//				digitalWrite(A0, LOW);
-//				relay_mode = RELAY_A0_ON;
-//			}
-//		}
+		if ( relay_mode == RELAY_A1_ON ) {
+			if ( busvoltage_A > 13.0 ) {
+				pinMode(A0, OUTPUT);
+				digitalWrite(A0, HIGH);
+				delay(10);
+				digitalWrite(A0, LOW);
+				relay_mode = RELAY_A0_ON;
+			}
+		}
 		//Turn on
 		if ( relay_mode == RELAY_A1_ON ) {
 			if (( busvoltage_A > 12.6 ) && ( current_mA_B > 400 )) {
