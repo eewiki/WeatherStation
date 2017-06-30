@@ -114,7 +114,7 @@ void loop () {
 
 		//Turn on
 		if ( relay_mode == RELAY_A1_ON ) {
-			if ( busvoltage_A > 13.0 ) {
+			if ( busvoltage_A > 13.1 ) {
 				pinMode(A0, OUTPUT);
 				digitalWrite(A0, HIGH);
 				delay(10);
