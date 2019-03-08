@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<script type="text/javascript" src="dygraph.min.js"></script>
+		<link rel="stylesheet" href="dygraph.css" />
+		<meta http-equiv="refresh" content="60">
+	</head>
+<body>
+
+<div id="graphdiv_wlt"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_wlt"),
+		"data/wlt_data.csv",
+		{
+			labels: [ 'Date', 'Temperature'],
+			rollPeriod: 12,
+			title: 'Temperature',
+			ylabel: 'Temperature (F)',
+		}
+	);
+</script>
+
+<div id="graphdiv_wlh"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_wlh"),
+		"data/wlh_data.csv",
+		{
+			labels: [ 'Date', 'Humidity'],
+			rollPeriod: 12,
+			title: 'Relative Humidity',
+			ylabel: 'Humidity (%)',
+		}
+	);
+</script>
+
+<div id="graphdiv_wlp"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_wlp"),
+		"data/wlp_data.csv",
+		{
+			labels: [ 'Date', 'Pressure'],
+			rollPeriod: 12,
+			title: 'Pressure',
+			ylabel: 'Pressure (hPa)',
+		}
+	);
+</script>
+
+</body>
+</html>
