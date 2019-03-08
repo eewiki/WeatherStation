@@ -62,6 +62,10 @@ run () {
 		wbp=$(echo $READ | sed 's/ /\n/g' | grep '^$WBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
 		wbt=$(echo $READ | sed 's/ /\n/g' | grep '^$WBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
 
+		wlt=$(echo $READ | sed 's/ /\n/g' | grep '^$L11T:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
+		wlh=$(echo $READ | sed 's/ /\n/g' | grep '^$L11H:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'H*' '{print $1}' || true)
+		wlp=$(echo $READ | sed 's/ /\n/g' | grep '^$L11P:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'hPa*' '{print $1}' || true)
+
 		xwbh=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
 		xwbp=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
 		xwbt=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
@@ -109,15 +113,40 @@ run () {
 			echo "$get_time,$wbh" >> ${wdir}/wbh_data.csv
 		fi
 
+		if [ "x$wlh" != "x" ] ; then
+			if [ 1 -eq "$(echo "${wlh} > ${wlh_max}" | bc)" ] ; then
+				wlh=${wbh_max}
+			fi
+
+			echo "wlh=[$wlh]"
+			echo "$get_time,$wlh" >> ${wdir}/wlh_data.csv
+		fi
+
 		if [ "x$wbp" != "x" ] ; then
 			echo "wbp=[$wbp]"
 			echo "$get_time,$wbp" >> ${wdir}/wbp_data.csv
+		fi
+
+		if [ "x$wlp" != "x" ] ; then
+			echo "wlp=[$wlp]"
+			echo "$get_time,$wlp" >> ${wdir}/wlp_data.csv
 		fi
 
 		if [ "x$wbt" != "x" ] ; then
 			if [ 1 -eq "$(echo "${wbt} < ${wbt_min_error}" | bc)" ] ; then
 				unset wbt
 			fi
+		fi
+
+		if [ "x$wlt" != "x" ] ; then
+			if [ 1 -eq "$(echo "${wlt} < ${wlt_min_error}" | bc)" ] ; then
+				unset wlt
+			fi
+		fi
+
+		if [ "x$wlt" != "x" ] ; then
+			echo "wlt=[$wlt]"
+			echo "$get_time,$wlt" >> ${wdir}/wlt_data.csv
 		fi
 
 		if [ "x$wbt" != "x" ] ; then
