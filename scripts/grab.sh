@@ -48,7 +48,7 @@ run () {
 	wbh_max="100"
 	wlh_max="100"
 
-	wlp_max="2000"
+	wlp_max="1800"
 
 	# Loop
 	while [ 1 ];
