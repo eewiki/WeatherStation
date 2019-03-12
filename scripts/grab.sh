@@ -127,7 +127,7 @@ run () {
 
 			echo "wlh=[$wlh]"
 			echo "$get_time,$wlh" >> ${wdir}/wlh_data.csv
-			echo "$wlh" >> ${wdir}/wlh_data.txt
+			echo "$wlh" > ${wdir}/wlh_data.txt
 		fi
 
 		if [ "x$wbp" != "x" ] ; then
@@ -141,7 +141,7 @@ run () {
 			else
 				echo "wlp=[$wlp]"
 				echo "$get_time,$wlp" >> ${wdir}/wlp_data.csv
-				echo "$wlp" >> ${wdir}/wlp_data.txt
+				echo "$wlp" > ${wdir}/wlp_data.txt
 			fi
 		fi
 
@@ -160,7 +160,7 @@ run () {
 		if [ "x$wlt" != "x" ] ; then
 			echo "wlt=[$wlt]"
 			echo "$get_time,$wlt" >> ${wdir}/wlt_data.csv
-			echo "$wlt" >> ${wdir}/wlt_data.txt
+			echo "$wlt" > ${wdir}/wlt_data.txt
 		fi
 
 		if [ "x$wbt" != "x" ] ; then
