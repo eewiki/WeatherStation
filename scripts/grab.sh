@@ -41,8 +41,14 @@ run () {
 	wbt_max="-100"
 	wbt_min_error="-100"
 
+	wlt_min="140"
+	wlt_max="-100"
+	wlt_min_error="-100"
+
 	wbh_max="100"
 	wlh_max="100"
+
+	wlp_max="2000"
 
 	# Loop
 	while [ 1 ];
@@ -129,8 +135,12 @@ run () {
 		fi
 
 		if [ "x$wlp" != "x" ] ; then
-			echo "wlp=[$wlp]"
-			echo "$get_time,$wlp" >> ${wdir}/wlp_data.csv
+			if [ 1 -eq "$(echo "${wlp} > ${wlp_max}" | bc)" ] ; then
+				unset wlp
+			else
+				echo "wlp=[$wlp]"
+				echo "$get_time,$wlp" >> ${wdir}/wlp_data.csv
+			fi
 		fi
 
 		if [ "x$wbt" != "x" ] ; then
