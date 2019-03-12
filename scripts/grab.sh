@@ -42,6 +42,7 @@ run () {
 	wbt_min_error="-100"
 
 	wbh_max="100"
+	wlh_max="100"
 
 	# Loop
 	while [ 1 ];
@@ -115,7 +116,7 @@ run () {
 
 		if [ "x$wlh" != "x" ] ; then
 			if [ 1 -eq "$(echo "${wlh} > ${wlh_max}" | bc)" ] ; then
-				wlh=${wbh_max}
+				wlh=${wlh_max}
 			fi
 
 			echo "wlh=[$wlh]"
