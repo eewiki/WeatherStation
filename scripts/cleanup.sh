@@ -22,6 +22,10 @@ new_day () {
 	wfile="wbh_data.csv" ; seven_day
 	wfile="wbp_data.csv" ; seven_day
 	wfile="wbt_data.csv" ; seven_day
+
+	wfile="wlh_data.csv" ; seven_day
+	wfile="wlp_data.csv" ; seven_day
+	wfile="wlt_data.csv" ; seven_day
 }
 
 new_day
