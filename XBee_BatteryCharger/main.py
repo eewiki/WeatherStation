@@ -35,10 +35,11 @@ solar_ina = INA219(SHUNT_OHMS, I2C(I2C_INTERFACE_NO), max_expected_amps, ina219a
 solar_ina.configure_32v_2a()
 
 while True:
+    time_snapshot = str(time.ticks_cpu())
     solar_voltage = str(solar_ina.voltage())
     solar_current = str(solar_ina.current())
-    print_solar_voltage = "$Solar:BusVolt:" + solar_voltage + "V*"
-    print_solar_current = "$Solar:Current:" + solar_current + "mA*"
+    print_solar_voltage = "$Solar:" + time_snapshot + ":BusVolt:" + solar_voltage + "V*"
+    print_solar_current = "$Solar:" + time_snapshot + ":Current:" + solar_current + "mA*"
     #print("$Solar:BusVolt:%sV*" % (solar_voltage))
     #print("$Solar:Current:%smA*" % (solar_current))
     xbee.transmit(TARGET_64BIT_ADDR, print_solar_voltage)
