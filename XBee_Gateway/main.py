@@ -18,6 +18,15 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import xbee
+import time
+
+print("#Booting Up...")
+
+while xbee.atcmd("AI") != 0:
+    print("#Trying to Connect...")
+    time.sleep(0.5)
+
+print("#Online: Waiting for XBee messages...")
 
 while True:
     received_msg = xbee.receive()
