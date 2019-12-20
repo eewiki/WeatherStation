@@ -47,6 +47,18 @@ class INA219:
         ADC_128SAMP: "12-bit, 128 samples"
     }
 
+    INA219_CONFIG_BVOLTAGERANGE_32V = const(1)
+    INA219_CONFIG_GAIN_8_320MV = const(3)
+    INA219_CONFIG_BADCRES_12BIT = const(1)
+    INA219_CONFIG_SADCRES_12BIT_1S_532US = const(3)
+    INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS = const(7)
+
+    #__INA219_CONFIG_BVOLTAGERANGE_32V = 0x2000 :  1 << 13
+    #__INA219_CONFIG_GAIN_8_320MV = 0x1800 : 3 << 11
+    #__INA219_CONFIG_BADCRES_12BIT = 0x0400 : 1 << 7
+    #__INA219_CONFIG_SADCRES_12BIT_1S_532US = 0x0018 : 3 < 3
+    #__INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS = 0x0007 7 << 1
+
     __ADDRESS = 0x40
 
     __REG_CONFIG = 0x00
@@ -98,7 +110,7 @@ class INA219:
     # to guarantee that current overflow can always be detected.
     __CURRENT_LSB_FACTOR = 32800
 
-    def __init__(self, shunt_ohms, i2c, max_expected_amps=2, address=__ADDRESS):
+    def __init__(self, shunt_ohms, i2c, address=__ADDRESS):
         """Construct the class.
 
         At a minimum pass in the resistance of the shunt resistor and I2C
@@ -108,23 +120,20 @@ class INA219:
         shunt_ohms -- value of shunt resistor in Ohms (mandatory).
         i2c -- an instance of the I2C class from the *machine* module, either
             I2C(1) or I2C(2) (mandatory).
-        max_expected_amps -- the maximum expected current in Amps (optional).
         address -- the I2C address of the INA219, defaults to
             *0x40* (optional).
         """
         self._i2c = i2c
         self._address = address
         self._shunt_ohms = shunt_ohms
-        self._max_expected_amps = max_expected_amps
-        self._min_device_current_lsb = self._calculate_min_current_lsb()
         self._gain = None
         self._auto_gain_enabled = False
 
     def configure_32v_2a(self):
-        self._current_lsb = self._determine_current_lsb(2, 2)
-        self._power_lsb = self._current_lsb * 20
+        #ina219_currentDivider_mA = 10; // Current
+        #ina219_powerDivider_mW = 2
         self._calibration_register(0x1000)
-        self._configure(self.RANGE_32V, self.GAIN_1_40MV, self.ADC_12BIT, self.ADC_12BIT)
+        self._configure(self.INA219_CONFIG_BVOLTAGERANGE_32V, self.INA219_CONFIG_GAIN_8_320MV, self.INA219_CONFIG_BADCRES_12BIT, self.INA219_CONFIG_SADCRES_12BIT_1S_532US, self.INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS)
 
     def voltage(self):
         """Return the bus voltage in volts."""
@@ -133,7 +142,7 @@ class INA219:
 
     def current(self):
         """Return the bus current in milliamps."""
-        return self._current_register() * self._current_lsb * 1000
+        return self._current_register() * 1000 / 1000
 
     def sleep(self):
         """Put the INA219 into power down mode."""
@@ -147,33 +156,18 @@ class INA219:
         # 40us delay to recover from powerdown (p14 of spec)
         utime.sleep_us(40)
 
-    def _configure(self, voltage_range, gain, bus_adc, shunt_adc):
-        #print("config_voltage_range: %u" % voltage_range)
-        #print("config_gain: %u" % gain)
-        #print("config_bus_adc: %u" % bus_adc)
-        #print("config_shunt_adc: %u" % shunt_adc)
+    def _configure(self, voltage_range, gain, bus_adc, shunt_adc, mode):
         configuration = (
             voltage_range << self.__BRNG | gain << self.__PG0 |
             bus_adc << self.__BADC1 | shunt_adc << self.__SADC1 |
-            self.__CONT_SH_BUS)
+            mode)
         self._configuration_register(configuration)
-
-    def _determine_current_lsb(self, max_expected_amps, max_possible_amps):
-        current_lsb = max_possible_amps / self.__CURRENT_LSB_FACTOR
-
-        if current_lsb < self._min_device_current_lsb:
-            current_lsb = self._min_device_current_lsb
-        return current_lsb
 
     def _configuration_register(self, register_value):
         self.__write_register(self.__REG_CONFIG, register_value)
 
     def _read_configuration(self):
         return self.__read_register(self.__REG_CONFIG)
-
-    def _calculate_min_current_lsb(self):
-        return self.__CALIBRATION_FACTOR / \
-            (self._shunt_ohms * self.__MAX_CALIBRATION_VALUE)
 
     def _calibration_register(self, register_value):
         self.__write_register(self.__REG_CALIBRATION, register_value)
@@ -186,6 +180,8 @@ class INA219:
         return self.__read_register(self.__REG_BUSVOLTAGE)
 
     def _current_register(self):
+        #Bug fix from Arduino...
+        self._calibration_register(0x1000)
         return self.__read_register(self.__REG_CURRENT, True)
 
     def __write_register(self, register, register_value):
