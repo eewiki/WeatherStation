@@ -53,73 +53,106 @@ TWELVEVR_INA219A_ADDR = 0x40
 I2C_INTERFACE_NO = 1
 SHUNT_OHMS = 0.1
 
+def read_solar():
+    try:
+        solar_voltage = str(solar_ina.voltage())
+        solar_current = str(solar_ina.current())
+        print_solar_voltage = "$Solar:" + time_snapshot + ":BusVolt:" + solar_voltage + "V*"
+        print_solar_current = "$Solar:" + time_snapshot + ":Current:" + solar_current + "mA*"
+    except:
+        print_solar_voltage = "$Solar:" + time_snapshot + ":BusVolt:INVALID*"
+        print_solar_current = "$Solar:" + time_snapshot + ":Current:INVALID*"
+        print("INA219:0x45: Solar read failed...")
+
+    try:
+        xbee.transmit(TARGET_64BIT_ADDR, print_solar_voltage)
+        xbee.transmit(TARGET_64BIT_ADDR, print_solar_current)
+    except:
+        print("XBee: TX Solar Failed...")
+
+def read_battery():
+    try:
+        battery_voltage = str(battery_ina.voltage())
+        battery_current = str(battery_ina.current())
+        print_battery_voltage = "$Battery:" + time_snapshot + ":BusVolt:" + battery_voltage + "V*"
+        print_battery_current = "$Battery:" + time_snapshot + ":Current:" + battery_current + "mA*"
+    except:
+        print_battery_voltage = "$Battery:" + time_snapshot + ":BusVolt:INVALID*"
+        print_battery_current = "$Battery:" + time_snapshot + ":Current:INVALID*"
+        print("INA219:0x44: Battery read failed...")
+
+    try:
+        xbee.transmit(TARGET_64BIT_ADDR, print_battery_voltage)
+        xbee.transmit(TARGET_64BIT_ADDR, print_battery_current)
+    except:
+        print("XBee: Battery TX Failed...")
+
+def read_fivevr():
+    try:
+        fivevr_voltage = str(fivevr_ina.voltage())
+        fivevr_current = str(fivevr_ina.current())
+        print_fivevr_voltage = "$5V_RAIL:" + time_snapshot + ":BusVolt:" + fivevr_voltage + "V*"
+        print_fivevr_current = "$5V_RAIL:" + time_snapshot + ":Current:" + fivevr_current + "mA*"
+    except:
+        print_fivevr_voltage = "$5V_RAIL:" + time_snapshot + ":BusVolt:INVALID*"
+        print_fivevr_current = "$5V_RAIL:" + time_snapshot + ":Current:INVALID*"
+        print("INA219:0x41: 5V Rail read failed...")
+
+    try:
+        xbee.transmit(TARGET_64BIT_ADDR, print_fivevr_voltage)
+        xbee.transmit(TARGET_64BIT_ADDR, print_fivevr_current)
+    except:
+        print("XBee: 5V RAIL TX Failed...")
+
+def read_twelvevr():
+    try:
+        twelvevr_voltage = str(twelvevr_ina.voltage())
+        twelvevr_current = str(twelvevr_ina.current())
+        print_twelvevr_voltage = "$12V_RAIL:" + time_snapshot + ":BusVolt:" + twelvevr_voltage + "V*"
+        print_twelvevr_current = "$12V_RAIL:" + time_snapshot + ":Current:" + twelvevr_current + "mA*"
+    except:
+        print_twelvevr_voltage = "$12V_RAIL:" + time_snapshot + ":BusVolt:INVALID*"
+        print_twelvevr_current = "$12V_RAIL:" + time_snapshot + ":Current:INVALID*"
+        print("INA219:0x41: 12V Rail read failed...")
+
+    try:
+        xbee.transmit(TARGET_64BIT_ADDR, print_twelvevr_voltage)
+        xbee.transmit(TARGET_64BIT_ADDR, print_twelvevr_current)
+    except:
+        print("XBee: 12V RAIL TX Failed...")
+
 solar_ina = INA219(SHUNT_OHMS, I2C(I2C_INTERFACE_NO), SOLAR_INA219A_ADDR)
-solar_ina.configure_32v_2a()
+try:
+    print("INA219:0x45: Configuring solar...")
+    solar_ina.configure_32v_2a()
+except:
+    print("INA219:0x45: Solar Missing...")
 
 battery_ina = INA219(SHUNT_OHMS, I2C(I2C_INTERFACE_NO), BATTERY_INA219A_ADDR)
-battery_ina.configure_32v_2a()
+try:
+    print("INA219:0x44: Configuring Battery...")
+    battery_ina.configure_32v_2a()
+except:
+    print("INA219:0x44: Battery Missing...")
 
 fivevr_ina = INA219(SHUNT_OHMS, I2C(I2C_INTERFACE_NO), FIVEVR_INA219A_ADDR)
-fivevr_ina.configure_32v_2a()
+try:
+    print("INA219:0x41: Configuring 5V Rail...")
+    fivevr_ina.configure_32v_2a()
+except:
+    print("INA219:0x41: 5V Rail Missing...")
 
-#twelvevr_ina = INA219(SHUNT_OHMS, I2C(I2C_INTERFACE_NO), TWELVEVR_INA219A_ADDR)
-#twelvevr_ina.configure_32v_2a()
+twelvevr_ina = INA219(SHUNT_OHMS, I2C(I2C_INTERFACE_NO), TWELVEVR_INA219A_ADDR)
+try:
+    print("INA219:0x40: Configuring 12V Rail...")
+    twelvevr_ina.configure_32v_2a()
+except:
+    print("INA219:0x40: 12V Rail Missing...")
 
 while True:
     time_snapshot = str(time.ticks_cpu())
-
-    #solar_ina.wake()
-    solar_voltage = str(solar_ina.voltage())
-    solar_current = str(solar_ina.current())
-    #solar_ina.sleep()
-
-    print("Got Solar")
-
-#    time.sleep(5)
-
-    print_solar_voltage = "$Solar:" + time_snapshot + ":BusVolt:" + solar_voltage + "V*"
-    print_solar_current = "$Solar:" + time_snapshot + ":Current:" + solar_current + "mA*"
-
-    #battery_ina.wake()
-    battery_voltage = str(battery_ina.voltage())
-    battery_current = str(battery_ina.current())
-    #battery_ina.sleep()
-
-    print("Got Battery")
-
-#    time.sleep(5)
-
-    print_battery_voltage = "$Battery:" + time_snapshot + ":BusVolt:" + battery_voltage + "V*"
-    print_battery_current = "$Battery:" + time_snapshot + ":Current:" + battery_current + "mA*"
-
-    fivevr_voltage = str(fivevr_ina.voltage())
-    fivevr_current = str(fivevr_ina.current())
-
-    print("Got 5VRail")
-
-#    time.sleep(5)
-
-    print_fivevr_voltage = "$5V_RAIL:" + time_snapshot + ":BusVolt:" + fivevr_voltage + "V*"
-    print_fivevr_current = "$5V_RAIL:" + time_snapshot + ":Current:" + fivevr_current + "mA*"
-
-#    twelvevr_voltage = str(twelvevr_ina.voltage())
-#    twelvevr_current = str(twelvevr_ina.current())
-
-#    print("Got 12VRail")
-
-#    print_twelvevr_voltage = "$12V_RAIL:" + time_snapshot + ":BusVolt:" + twelvevr_voltage + "V*"
-#    print_twelvevr_current = "$12V_RAIL:" + time_snapshot + ":Current:" + twelvevr_current + "mA*"
-
-    xbee.transmit(TARGET_64BIT_ADDR, print_solar_voltage)
-    xbee.transmit(TARGET_64BIT_ADDR, print_solar_current)
-
-    xbee.transmit(TARGET_64BIT_ADDR, print_battery_voltage)
-    xbee.transmit(TARGET_64BIT_ADDR, print_battery_current)
-
-    xbee.transmit(TARGET_64BIT_ADDR, print_fivevr_voltage)
-    xbee.transmit(TARGET_64BIT_ADDR, print_fivevr_current)
-
-#    xbee.transmit(TARGET_64BIT_ADDR, print_twelvevr_voltage)
-#    xbee.transmit(TARGET_64BIT_ADDR, print_twelvevr_current)
-
-    time.sleep(5)
+    read_solar()
+    read_battery()
+    read_fivevr()
+    read_twelvevr()
+    time.sleep(10)
