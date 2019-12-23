@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<script type="text/javascript" src="dygraph.min.js"></script>
+		<link rel="stylesheet" href="dygraph.css" />
+		<meta http-equiv="refresh" content="60">
+	</head>
+<body>
+
+<div id="graphdiv_solar_voltage"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_solar_voltage"),
+		"data/solar_voltage_data.csv",
+		{
+			labels: [ 'Date', 'Solar'],
+			rollPeriod: 12,
+			title: 'Solar Voltage',
+			ylabel: 'Voltage (V)',
+		}
+	);
+</script>
+
+<div id="graphdiv_solar_current"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_solar_current"),
+		"data/solar_current_data.csv",
+		{
+			labels: [ 'Date', 'Solar],
+			rollPeriod: 12,
+			title: 'Solar Current',
+			ylabel: 'Current (mA)',
+		}
+	);
+</script>
+
+</body>
+</html>
