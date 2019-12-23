@@ -63,10 +63,10 @@ run () {
 	# Loop
 	while [ 1 ];
 	do
-		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "MsgFrom:" -q ":#^\n"`
+		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "MsgFrom:" -q ":#"`
 		echo "[$READ]"
 
-		solar_volt=$(echo $READ | sed 's/:#\n/\n/g' | grep -a '0013A20041A7AE31:Solar:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V*' '{print $1}' || true)
+		solar_volt=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
 		echo "solar_volt=[$solar_volt]"
 		solar_load=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a Current | awk -F ':' '{print $6}' | awk -F 'mA*' '{print $1}' || true)
 		echo "solar_load=[$solar_load]"
