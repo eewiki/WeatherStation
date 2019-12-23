@@ -37,6 +37,16 @@ run () {
 
 	stty -F ${port} raw speed 57600 &> /dev/null
 
+#MsgFrom: 0013A20041A7AE31: $Solar:341754561:BusVolt:17.936V*
+#MsgFrom: 0013A20041A7AE31: $Solar:341754561:Current:190.0mA*
+#MsgFrom: 0013A20041A7AE31: $Battery:341754561:BusVolt:13.528V*
+#MsgFrom: 0013A20041A7AE31: $Battery:341754561:Current:-221.0mA*
+#MsgFrom: 0013A20041A7AE31: $5V_RAIL:341754561:BusVolt:5.232V*
+#MsgFrom: 0013A20041A7AE31: $5V_RAIL:341754561:Current:0.0mA*
+#MsgFrom: 0013A20041A7AE31: $12V_RAIL:341754561:BusVolt:13.524V*
+#MsgFrom: 0013A20041A7AE31: $12V_RAIL:341754561:Current:-1.0mA*
+
+
 	wbt_min="140"
 	wbt_max="-100"
 	wbt_min_error="-100"
@@ -53,7 +63,7 @@ run () {
 	# Loop
 	while [ 1 ];
 	do
-		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "$" -q "^\n"`
+		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "^MsgFrom:" -q "^\n"`
 		echo "[$READ]"
 		load_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '^$LOAD:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
 		echo "load_busvolt=[$load_busvolt]"
