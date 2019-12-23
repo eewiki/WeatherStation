@@ -76,57 +76,30 @@ run () {
 		twelvev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
 		echo "twelvev_mamp=[$twelvev_mamp]"
 
-
-#		charger_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '^$CHARGER:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
-#		echo "charger_busvolt=[$charger_busvolt]"
-#		charger_current=$(echo $READ | sed 's/ /\n/g' | grep '^$CHARGER:' | grep Current | tail -1 | awk -F ':' '{print $4}' | awk -F 'mA*' '{print $1}' || true)
-#		echo "charger_current=[$charger_current]"
-
-#		wbh=$(echo $READ | sed 's/ /\n/g' | grep '^$WBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
-#		wbp=$(echo $READ | sed 's/ /\n/g' | grep '^$WBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
-#		wbt=$(echo $READ | sed 's/ /\n/g' | grep '^$WBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
-
-#		wlt=$(echo $READ | sed 's/ /\n/g' | grep '^$L11T:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
-#		wlh=$(echo $READ | sed 's/ /\n/g' | grep '^$L11H:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'H*' '{print $1}' || true)
-#		wlp=$(echo $READ | sed 's/ /\n/g' | grep '^$L11P:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'hPa*' '{print $1}' || true)
-
-#		xwbh=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBH:' | grep Humid | tail -1 | awk -F ':' '{print $4}' | awk -F 'P*' '{print $1}' || true)
-#		xwbp=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBP:' | grep Pres | tail -1 | awk -F ':' '{print $4}' | awk -F 'Pa*' '{print $1}' || true)
-#		xwbt=$(echo $READ | sed 's/ /\n/g' | grep '^$XWBT:' | grep TempF | tail -1 | awk -F ':' '{print $4}' | awk -F 'F*' '{print $1}' || true)
-
-#		if [ "x$xwbh" != "x" ] ; then
-#			echo "xwbh=[$xwbh]" >> /tmp/x.log
-#		fi
-
-#		if [ "x$xwbp" != "x" ] ; then
-#			echo "xwbp=[$xwbp]" >> /tmp/x.log
-#		fi
-
-#		if [ "x$xwbt" != "x" ] ; then
-#			echo "xwbt=[$xwbt]" >> /tmp/x.log
-#		fi
-
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 		get_time_weather=$(env TZ=America/North_Dakota/Center date +"%Y-%m-%dT%k:%M:%S")
 		get_day=$(env TZ=America/North_Dakota/Center date +"%d")
 
-#		if [ "x$load_busvolt" != "x" ] && [ "x$load_current" != "x" ] ; then
-#			echo "$get_time,$load_busvolt" >> ${wdir}/load_voltage_data.csv
-#			echo "$get_time,$load_current" >> ${wdir}/load_current_data.csv
-#			if [ "x$charger_busvolt" != "x" ] ; then
-#				echo "$get_time,$load_busvolt,$charger_busvolt" >> ${wdir}/voltage_data.csv
-#				echo "save:[$get_time,$load_busvolt,$charger_busvolt]"
-#			fi
-#		fi
-#
-#		if [ "x$charger_busvolt" != "x" ] && [ "x$charger_current" != "x" ] ; then
-#			echo "$get_time,$charger_busvolt" >> ${wdir}/charger_voltage_data.csv
-#			echo "$get_time,$charger_current" >> ${wdir}/charger_current_data.csv
-#			if [ "x$load_current" != "x" ] ; then
-#				echo "$get_time,$load_current,$charger_current" >> ${wdir}/current_data.csv
-#				echo "save:[$get_time,$load_current,$charger_current]"
-#			fi
-#		fi
+		if [ "x$solar_volt" != "x" ] && [ "x$solar_mamp" != "x" ] ; then
+			echo "$get_time,$solar_volt" >> ${wdir}/solar_voltage_data.csv
+			echo "$get_time,$solar_mamp" >> ${wdir}/solar_current_data.csv
+		fi
+
+		if [ "x$battery_volt" != "x" ] && [ "x$battery_mamp" != "x" ] ; then
+			echo "$get_time,$battery_volt" >> ${wdir}/battery_voltage_data.csv
+			echo "$get_time,$battery_mamp" >> ${wdir}/battery_current_data.csv
+		fi
+
+		if [ "x$fivev_volt" != "x" ] && [ "x$fivev_mamp" != "x" ] ; then
+			echo "$get_time,$fivev_volt" >> ${wdir}/fivev_voltage_data.csv
+			echo "$get_time,$fivev_mamp" >> ${wdir}/fivev_current_data.csv
+		fi
+
+		if [ "x$twelvev_volt" != "x" ] && [ "x$twelvev_mamp" != "x" ] ; then
+			echo "$get_time,$twelvev_volt" >> ${wdir}/twelvev_voltage_data.csv
+			echo "$get_time,$twelvev_mamp" >> ${wdir}/twelvev_current_data.csv
+		fi
+
 #
 #		if [ "x$wbh" != "x" ] ; then
 #			if [ 1 -eq "$(echo "${wbh} > ${wbh_max}" | bc)" ] ; then
@@ -214,7 +187,7 @@ run () {
 }
 
 if [ ! -f ${lockfile} ] ; then
-	#touch ${lockfile}
+	touch ${lockfile}
 
 	run
 fi
