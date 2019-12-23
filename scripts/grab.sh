@@ -208,7 +208,7 @@ run () {
 }
 
 if [ ! -f ${lockfile} ] ; then
-	touch ${lockfile}
+	#touch ${lockfile}
 
 	run
 fi
