@@ -57,11 +57,11 @@ def read_solar():
     try:
         solar_voltage = str(solar_ina.voltage())
         solar_current = str(solar_ina.current())
-        print_solar_voltage = "$Solar:" + time_snapshot + ":BusVolt:" + solar_voltage + "V*"
-        print_solar_current = "$Solar:" + time_snapshot + ":Current:" + solar_current + "mA*"
+        print_solar_voltage = "Solar:" + time_snapshot + ":BusVolt:" + solar_voltage + "V*"
+        print_solar_current = "Solar:" + time_snapshot + ":Current:" + solar_current + "mA*"
     except:
-        print_solar_voltage = "$Solar:" + time_snapshot + ":BusVolt:INVALID*"
-        print_solar_current = "$Solar:" + time_snapshot + ":Current:INVALID*"
+        print_solar_voltage = "Solar:" + time_snapshot + ":BusVolt:INVALID*"
+        print_solar_current = "Solar:" + time_snapshot + ":Current:INVALID*"
         print("INA219:0x45: Solar read failed...")
 
     try:
@@ -74,11 +74,11 @@ def read_battery():
     try:
         battery_voltage = str(battery_ina.voltage())
         battery_current = str(battery_ina.current())
-        print_battery_voltage = "$Battery:" + time_snapshot + ":BusVolt:" + battery_voltage + "V*"
-        print_battery_current = "$Battery:" + time_snapshot + ":Current:" + battery_current + "mA*"
+        print_battery_voltage = "Battery:" + time_snapshot + ":BusVolt:" + battery_voltage + "V*"
+        print_battery_current = "Battery:" + time_snapshot + ":Current:" + battery_current + "mA*"
     except:
-        print_battery_voltage = "$Battery:" + time_snapshot + ":BusVolt:INVALID*"
-        print_battery_current = "$Battery:" + time_snapshot + ":Current:INVALID*"
+        print_battery_voltage = "Battery:" + time_snapshot + ":BusVolt:INVALID*"
+        print_battery_current = "Battery:" + time_snapshot + ":Current:INVALID*"
         print("INA219:0x44: Battery read failed...")
 
     try:
@@ -91,35 +91,35 @@ def read_fivevr():
     try:
         fivevr_voltage = str(fivevr_ina.voltage())
         fivevr_current = str(fivevr_ina.current())
-        print_fivevr_voltage = "$5V_RAIL:" + time_snapshot + ":BusVolt:" + fivevr_voltage + "V*"
-        print_fivevr_current = "$5V_RAIL:" + time_snapshot + ":Current:" + fivevr_current + "mA*"
+        print_fivevr_voltage = "5V_Rail:" + time_snapshot + ":BusVolt:" + fivevr_voltage + "V*"
+        print_fivevr_current = "5V_Rail:" + time_snapshot + ":Current:" + fivevr_current + "mA*"
     except:
-        print_fivevr_voltage = "$5V_RAIL:" + time_snapshot + ":BusVolt:INVALID*"
-        print_fivevr_current = "$5V_RAIL:" + time_snapshot + ":Current:INVALID*"
+        print_fivevr_voltage = "5V_Rail:" + time_snapshot + ":BusVolt:INVALID*"
+        print_fivevr_current = "5V_Rail:" + time_snapshot + ":Current:INVALID*"
         print("INA219:0x41: 5V Rail read failed...")
 
     try:
         xbee.transmit(TARGET_64BIT_ADDR, print_fivevr_voltage)
         xbee.transmit(TARGET_64BIT_ADDR, print_fivevr_current)
     except:
-        print("XBee: 5V RAIL TX Failed...")
+        print("XBee: 5V Rail TX Failed...")
 
 def read_twelvevr():
     try:
         twelvevr_voltage = str(twelvevr_ina.voltage())
         twelvevr_current = str(twelvevr_ina.current())
-        print_twelvevr_voltage = "$12V_RAIL:" + time_snapshot + ":BusVolt:" + twelvevr_voltage + "V*"
-        print_twelvevr_current = "$12V_RAIL:" + time_snapshot + ":Current:" + twelvevr_current + "mA*"
+        print_twelvevr_voltage = "12V_Rail:" + time_snapshot + ":BusVolt:" + twelvevr_voltage + "V*"
+        print_twelvevr_current = "12V_Rail:" + time_snapshot + ":Current:" + twelvevr_current + "mA*"
     except:
-        print_twelvevr_voltage = "$12V_RAIL:" + time_snapshot + ":BusVolt:INVALID*"
-        print_twelvevr_current = "$12V_RAIL:" + time_snapshot + ":Current:INVALID*"
+        print_twelvevr_voltage = "12V_Rail:" + time_snapshot + ":BusVolt:INVALID*"
+        print_twelvevr_current = "12V_Rail:" + time_snapshot + ":Current:INVALID*"
         print("INA219:0x41: 12V Rail read failed...")
 
     try:
         xbee.transmit(TARGET_64BIT_ADDR, print_twelvevr_voltage)
         xbee.transmit(TARGET_64BIT_ADDR, print_twelvevr_current)
     except:
-        print("XBee: 12V RAIL TX Failed...")
+        print("XBee: 12V Rail TX Failed...")
 
 solar_ina = INA219(SHUNT_OHMS, I2C(I2C_INTERFACE_NO), SOLAR_INA219A_ADDR)
 try:

@@ -69,7 +69,7 @@ run () {
 		solar_volt=$(echo $READ | sed 's/ /\n/g' | grep '0013A20041A7AE31:Solar:' | grep BusVolt | tail -1 | awk -F ':' '{print $6}' | awk -F 'V*' '{print $1}' || true)
 		echo "solar_volt=[$solar_volt]"
 		solar_load=$(echo $READ | sed 's/ /\n/g' | grep '0013A20041A7AE31:Solar:' | grep Current | tail -1 | awk -F ':' '{print $6}' | awk -F 'mA*' '{print $1}' || true)
-		echo "lsolar_load=[$solar_load]"
+		echo "solar_load=[$solar_load]"
 
 #		charger_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '^$CHARGER:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
 #		echo "charger_busvolt=[$charger_busvolt]"
