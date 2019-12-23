@@ -34,4 +34,4 @@ while True:
         # Get the sender's 64-bit address and payload from the received message.
         sender = received_msg['sender_eui64']
         payload = received_msg['payload']
-        print("MsgFrom: %s: %s" % (''.join('{:02x}'.format(x).upper() for x in sender), payload.decode()))
+        print("MsgFrom:%s:%s" % (''.join('{:02x}'.format(x).upper() for x in sender), payload.decode()))
