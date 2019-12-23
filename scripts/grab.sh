@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 lockfile=/tmp/cron.lock
 
