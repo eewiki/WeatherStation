@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 lockfile=/tmp/cron.lock
 
@@ -37,16 +37,6 @@ run () {
 
 	stty -F ${port} raw speed 57600 &> /dev/null
 
-#MsgFrom:0013A20041A7AE31:Solar:341754561:BusVolt:17.936V*
-#MsgFrom:0013A20041A7AE31:Solar:341754561:Current:190.0mA*
-#MsgFrom:0013A20041A7AE31:Battery:341754561:BusVolt:13.528V*
-#MsgFrom:0013A20041A7AE31:Battery:341754561:Current:-221.0mA*
-#MsgFrom:0013A20041A7AE31:5V_RAIL:341754561:BusVolt:5.232V*
-#MsgFrom:0013A20041A7AE31:5V_RAIL:341754561:Current:0.0mA*
-#MsgFrom:0013A20041A7AE31:12V_RAIL:341754561:BusVolt:13.524V*
-#MsgFrom:0013A20041A7AE31:12V_RAIL:341754561:Current:-1.0mA*
-
-
 	wbt_min="140"
 	wbt_max="-100"
 	wbt_min_error="-100"
@@ -70,6 +60,22 @@ run () {
 		echo "solar_volt=[$solar_volt]"
 		solar_mamp=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
 		echo "solar_mamp=[$solar_mamp]"
+
+		battery_volt=$(echo $READ | grep -a '0013A20041A7AE31:Battery:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
+		echo "battery_volt=[$battery_volt]"
+		battery_mamp=$(echo $READ | grep -a '0013A20041A7AE31:Battery:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
+		echo "battery_mamp=[$battery_mamp]"
+
+		fivev_volt=$(echo $READ | grep -a '0013A20041A7AE31:5V_Rail:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
+		echo "fivev_volt=[$fivev_volt]"
+		fivev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:5V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
+		echo "fivev_mamp=[$fivev_mamp]"
+
+		twelvev_volt=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
+		echo "twelvev_volt=[$twelvev_volt]"
+		twelvev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
+		echo "twelvev_mamp=[$twelvev_mamp]"
+
 
 #		charger_busvolt=$(echo $READ | sed 's/ /\n/g' | grep '^$CHARGER:' | grep BusVolt | tail -1 | awk -F ':' '{print $4}' | awk -F 'V*' '{print $1}' || true)
 #		echo "charger_busvolt=[$charger_busvolt]"
