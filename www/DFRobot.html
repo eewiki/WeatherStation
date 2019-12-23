@@ -1,0 +1,122 @@
+<html>
+	<head>
+		<script type="text/javascript" src="dygraph.min.js"></script>
+		<link rel="stylesheet" href="dygraph.css" />
+		<meta http-equiv="refresh" content="60">
+	</head>
+<body>
+
+<div id="graphdiv_solar_voltage"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_solar_voltage"),
+		"data/solar_voltage_data.csv",
+		{
+			labels: [ 'Date', 'Solar'],
+			rollPeriod: 12,
+			title: 'Solar Voltage',
+			ylabel: 'Voltage (V)',
+		}
+	);
+</script>
+
+<div id="graphdiv_solar_current"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_solar_current"),
+		"data/solar_current_data.csv",
+		{
+			labels: [ 'Date', 'Solar' ],
+			rollPeriod: 12,
+			title: 'Solar Current',
+			ylabel: 'Current (mA)',
+		}
+	);
+</script>
+
+<div id="graphdiv_battery_voltage"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_battery_voltage"),
+		"data/battery_voltage_data.csv",
+		{
+			labels: [ 'Date', 'Battery'],
+			rollPeriod: 12,
+			title: 'Battery Voltage',
+			ylabel: 'Voltage (V)',
+		}
+	);
+</script>
+
+<div id="graphdiv_battery_current"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_battery_current"),
+		"data/battery_current_data.csv",
+		{
+			labels: [ 'Date', 'Battery' ],
+			rollPeriod: 12,
+			title: 'Battery Current',
+			ylabel: 'Current (mA)',
+		}
+	);
+</script>
+
+<div id="graphdiv_fivev_voltage"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_fivev_voltage"),
+		"data/fivev_voltage_data.csv",
+		{
+			labels: [ 'Date', '5V Rail'],
+			rollPeriod: 12,
+			title: '5V Rail Voltage',
+			ylabel: 'Voltage (V)',
+		}
+	);
+</script>
+
+<div id="graphdiv_fivev_current"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_fivev_current"),
+		"data/fivev_current_data.csv",
+		{
+			labels: [ 'Date', '5V Rail' ],
+			rollPeriod: 12,
+			title: '5V Rail Current',
+			ylabel: 'Current (mA)',
+		}
+	);
+</script>
+
+<div id="graphdiv_twelvev_voltage"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_twelvev_voltage"),
+		"data/twelvev_voltage_data.csv",
+		{
+			labels: [ 'Date', '12V Rail'],
+			rollPeriod: 12,
+			title: '12V Rail Voltage',
+			ylabel: 'Voltage (V)',
+		}
+	);
+</script>
+
+<div id="graphdiv_twelvev_current"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_twelvev_current"),
+		"data/twelvev_current_data.csv",
+		{
+			labels: [ 'Date', '12V Rail' ],
+			rollPeriod: 12,
+			title: '12V Rail Current',
+			ylabel: 'Current (mA)',
+		}
+	);
+</script>
+
+</body>
+</html>
