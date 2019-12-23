@@ -155,4 +155,4 @@ while True:
     read_battery()
     read_fivevr()
     read_twelvevr()
-    time.sleep(10)
+    time.sleep(15)
