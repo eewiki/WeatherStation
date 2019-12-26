@@ -34,6 +34,11 @@
 			labels: [ 'Date', 'Solar' ],
 			rollPeriod: 12,
 			title: 'Solar Current',
+			axes: {
+				y: {
+					valueRange: [0, 300]
+				},
+			},
 			ylabel: 'Current (mA)',
 		}
 	);
@@ -50,7 +55,7 @@
 			title: 'Battery Voltage',
 			axes: {
 				y: {
-					valueRange: [11, 14]
+					valueRange: [11.5, 14]
 				},
 			},
 			ylabel: 'Voltage (V)',
@@ -67,6 +72,11 @@
 			labels: [ 'Date', 'Battery' ],
 			rollPeriod: 12,
 			title: 'Battery Current',
+			axes: {
+				y: {
+					valueRange: [-200, 200]
+				},
+			},
 			ylabel: 'Current (mA)',
 		}
 	);
@@ -83,7 +93,7 @@
 			title: '5V Rail Voltage',
 			axes: {
 				y: {
-					valueRange: [5, 5.5]
+					valueRange: [5, 5.3]
 				},
 			},
 			ylabel: 'Voltage (V)',
@@ -100,6 +110,11 @@
 			labels: [ 'Date', '5V Rail' ],
 			rollPeriod: 12,
 			title: '5V Rail Current',
+			axes: {
+				y: {
+					valueRange: [0, 500]
+				},
+			},
 			ylabel: 'Current (mA)',
 		}
 	);
@@ -133,6 +148,11 @@
 			labels: [ 'Date', '12V Rail' ],
 			rollPeriod: 12,
 			title: '12V Rail Current',
+			axes: {
+				y: {
+					valueRange: [0, 100]
+				},
+			},
 			ylabel: 'Current (mA)',
 		}
 	);
