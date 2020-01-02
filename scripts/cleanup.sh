@@ -11,21 +11,17 @@ seven_day () {
 }
 
 new_day () {
-	wfile="load_voltage_data.csv" ; seven_day
-	wfile="load_current_data.csv" ; seven_day
-	wfile="voltage_data.csv" ; seven_day
+	wfile="solar_voltage_data.csv" ; seven_day
+	wfile="solar_current_data.csv" ; seven_day
 
-	wfile="charger_voltage_data.csv" ; seven_day
-	wfile="charger_current_data.csv" ; seven_day
-	wfile="current_data.csv" ; seven_day
+	wfile="battery_voltage_data.csv" ; seven_day
+	wfile="battery_current_data.csv" ; seven_day
 
-	wfile="wbh_data.csv" ; seven_day
-	wfile="wbp_data.csv" ; seven_day
-	wfile="wbt_data.csv" ; seven_day
+	wfile="fivev_voltage_data.csv" ; seven_day
+	wfile="fivev_current_data.csv" ; seven_day
 
-	wfile="wlh_data.csv" ; seven_day
-	wfile="wlp_data.csv" ; seven_day
-	wfile="wlt_data.csv" ; seven_day
+	wfile="twelvev_voltage_data.csv" ; seven_day
+	wfile="twelvev_current_data.csv" ; seven_day
 }
 
 new_day
