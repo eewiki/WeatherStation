@@ -76,6 +76,15 @@ run () {
 		twelvev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
 		echo "twelvev_mamp=[$twelvev_mamp]"
 
+		pth_pressure=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Press | awk -F ':' '{print $6}' | awk -F 'mB' '{print $1}' || true)
+		echo "pth_pressure=[$PTH_pressure]"
+
+		pth_temp=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Temp | awk -F ':' '{print $8}' | awk -F 'C' '{print $1}' || true)
+		echo "pth_temp=[$pth_temp]"
+
+		pth_humidity=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Humidity | awk -F ':' '{print $10}' | awk -F '%' '{print $1}' || true)
+		echo "pth_humidity=[$pth_humidity]"
+
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 		get_time_weather=$(env TZ=America/North_Dakota/Center date +"%Y-%m-%dT%k:%M:%S")
 		get_day=$(env TZ=America/North_Dakota/Center date +"%d")
@@ -98,6 +107,18 @@ run () {
 		if [ "x$twelvev_volt" != "x" ] && [ "x$twelvev_mamp" != "x" ] ; then
 			echo "$get_time,$twelvev_volt" >> ${wdir}/twelvev_voltage_data.csv
 			echo "$get_time,$twelvev_mamp" >> ${wdir}/twelvev_current_data.csv
+		fi
+
+		if [ "x$pth_pressure" != "x" ] ; then
+			echo "$get_time,$pth_pressure" >> ${wdir}/pth_pressure_data.csv
+		fi
+
+		if [ "x$pth_temp" != "x" ] ; then
+			echo "$get_time,$pth_temp" >> ${wdir}/pth_temp_data.csv
+		fi
+
+		if [ "x$pth_humidity" != "x" ] ; then
+			echo "$get_time,$pth_humidity" >> ${wdir}/pth_humidity_data.csv
 		fi
 
 #
