@@ -77,7 +77,7 @@ run () {
 		echo "twelvev_mamp=[$twelvev_mamp]"
 
 		pth_pressure=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Press | awk -F ':' '{print $6}' | awk -F 'mB' '{print $1}' || true)
-		echo "pth_pressure=[$PTH_pressure]"
+		echo "pth_pressure=[$pth_pressure]"
 
 		pth_temp=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Temp | awk -F ':' '{print $8}' | awk -F 'C' '{print $1}' || true)
 		echo "pth_temp=[$pth_temp]"
