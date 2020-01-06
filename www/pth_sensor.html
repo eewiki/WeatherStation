@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<script type="text/javascript" src="dygraph.min.js"></script>
+		<link rel="stylesheet" href="dygraph.css" />
+		<meta http-equiv="refresh" content="60">
+	</head>
+<body>
+
+<div id="graphdiv_pth_temp"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_pth_temp"),
+		"data/pth_temp_data.csv",
+		{
+			labels: [ 'Date', 'Temperature (C)' ],
+			rollPeriod: 12,
+			title: '12V Rail Current',
+			axes: {
+				y: {
+					valueRange: [0, 100]
+				},
+			},
+			ylabel: 'Degress (C)',
+		}
+	);
+</script>
+
+</body>
+</html>
