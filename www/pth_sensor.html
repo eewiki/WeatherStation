@@ -6,6 +6,25 @@
 	</head>
 <body>
 
+<div id="graphdiv_pth_pressure"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_pth_pressure"),
+		"data/pth_pressure_data.csv",
+		{
+			labels: [ 'Date', 'Pressure (mB)' ],
+			rollPeriod: 12,
+			title: 'PTH Pressure',
+			axes: {
+				y: {
+					valueRange: [0, 100]
+				},
+			},
+			ylabel: 'Pressure (mB)',
+		}
+	);
+</script>
+
 <div id="graphdiv_pth_temp"></div>
 <script type="text/javascript">
 	g = new Dygraph(
@@ -14,13 +33,32 @@
 		{
 			labels: [ 'Date', 'Temperature (C)' ],
 			rollPeriod: 12,
-			title: '12V Rail Current',
+			title: 'PTH Temperature',
 			axes: {
 				y: {
 					valueRange: [0, 100]
 				},
 			},
 			ylabel: 'Degress (C)',
+		}
+	);
+</script>
+
+<div id="graphdiv_pth_humidity"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_pth_humidity"),
+		"data/pth_humidity_data.csv",
+		{
+			labels: [ 'Date', 'humidity (%)' ],
+			rollPeriod: 12,
+			title: 'PTH Humidity',
+			axes: {
+				y: {
+					valueRange: [0, 100]
+				},
+			},
+			ylabel: '(%)',
 		}
 	);
 </script>
