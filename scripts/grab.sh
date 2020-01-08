@@ -67,14 +67,40 @@ run () {
 		echo "battery_mamp=[$battery_mamp]"
 
 		fivev_volt=$(echo $READ | grep -a '0013A20041A7AE31:5V_Rail:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
-		echo "fivev_volt=[$fivev_volt]"
+		if [ "x$fivev_volt" != "xIN" ] ; then
+			echo "fivev_volt=[$fivev_volt]"
+		else
+			unset fivev_volt
+		fi
+
 		fivev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:5V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
-		echo "fivev_mamp=[$fivev_mamp]"
+		if [ "x$fivev_mamp" != "xINVALID" ] ; then
+			echo "fivev_mamp=[$fivev_mamp]"
+		else
+			unset fivev_mamp
+		fi
+
 
 		twelvev_volt=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
-		echo "twelvev_volt=[$twelvev_volt]"
+		if [ "x$twelvev_volt" != "xIN" ] ; then
+			echo "twelvev_volt=[$twelvev_volt]"
+		else
+			unset twelvev_volt
+		fi
+
 		twelvev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
-		echo "twelvev_mamp=[$twelvev_mamp]"
+		if [ "x$twelvev_mamp" != "xINVALID" ] ; then
+			echo "twelvev_mamp=[$twelvev_mamp]"
+		else
+			unset twelvev_mamp
+		fi
+
+		battery_hdc_temp=$(echo $READ | grep -a '0013A20041A7AE31:HDC1080:' | grep -a Temperature | awk -F ':' '{print $8}' | awk -F 'F' '{print $1}' || true)
+		if [ "x$battery_hdc_temp" != "xINVALID" ] ; then
+			echo "battery_hdc_temp=[$battery_hdc_temp]"
+		else
+			unset battery_hdc_temp
+		fi
 
 		pth_pressure=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Press | awk -F ':' '{print $6}' | awk -F 'mB' '{print $1}' || true)
 		echo "pth_pressure=[$pth_pressure]"
@@ -107,6 +133,10 @@ run () {
 		if [ "x$twelvev_volt" != "x" ] && [ "x$twelvev_mamp" != "x" ] ; then
 			echo "$get_time,$twelvev_volt" >> ${wdir}/twelvev_voltage_data.csv
 			echo "$get_time,$twelvev_mamp" >> ${wdir}/twelvev_current_data.csv
+		fi
+
+		if [ "x$battery_hdc_temp" != "x" ] ; then
+			echo "$get_time,$battery_hdc_temp" >> ${wdir}/battery_hdc_temp_data.csv
 		fi
 
 		if [ "x$pth_pressure" != "x" ] ; then
