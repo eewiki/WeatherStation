@@ -95,7 +95,7 @@ run () {
 			unset twelvev_mamp
 		fi
 
-		battery_hdc_temp=$(echo $READ | grep -a '0013A20041A7AE31:HDC1080:' | grep -a Temperature | awk -F ':' '{print $8}' | awk -F 'F' '{print $1}' || true)
+		battery_hdc_temp=$(echo $READ | grep -a '0013A20041A7AE31:HDC1080:' | grep -a Temperature | awk -F ':' '{print $6}' | awk -F 'F' '{print $1}' || true)
 		if [ "x$battery_hdc_temp" != "xINVALID" ] ; then
 			echo "battery_hdc_temp=[$battery_hdc_temp]"
 		else
