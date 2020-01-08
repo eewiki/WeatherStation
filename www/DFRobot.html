@@ -6,6 +6,20 @@
 	</head>
 <body>
 
+<div id="graphdiv_battery_hdc_temp"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_battery_hdc_temp"),
+		"data/battery_hdc_temp_data.csv",
+		{
+			labels: [ 'Date', 'Temperature'],
+			rollPeriod: 12,
+			title: 'Battery Temperature',
+			ylabel: 'Temperature (F)',
+		}
+	);
+</script>
+
 <div id="graphdiv_solar_voltage"></div>
 <script type="text/javascript">
 	g = new Dygraph(
