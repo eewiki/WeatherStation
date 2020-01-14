@@ -92,13 +92,13 @@ run () {
 			unset battery_hdc_temp
 		fi
 
-		pth_pressure=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Press | awk -F ':' '{print $6}' | awk -F 'mB' '{print $1}' || true)
+		pth_pressure=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Press | awk -F ':' '{print $6}' | awk -F 'mB' '{print $1}' || true)
 		echo "pth_pressure=[$pth_pressure]"
 
-		pth_temp=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Temp | awk -F ':' '{print $8}' | awk -F 'C' '{print $1}' || true)
+		pth_temp=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Temp | awk -F ':' '{print $8}' | awk -F 'C' '{print $1}' || true)
 		echo "pth_temp=[$pth_temp]"
 
-		pth_humidity=$(echo $READ | grep -a '0013A20041981B84:PTH_sensor:' | grep -a Humidity | awk -F ':' '{print $10}' | awk -F '%' '{print $1}' || true)
+		pth_humidity=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Humidity | awk -F ':' '{print $10}' | awk -F '%' '{print $1}' || true)
 		echo "pth_humidity=[$pth_humidity]"
 
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
