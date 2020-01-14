@@ -37,18 +37,8 @@ run () {
 
 	stty -F ${port} raw speed 57600 &> /dev/null
 
-	wbt_min="140"
-	wbt_max="-100"
-	wbt_min_error="-100"
-
-	wlt_min="140"
-	wlt_max="-100"
-	wlt_min_error="-100"
-
-	wbh_max="100"
-	wlh_max="100"
-
-	wlp_max="1800"
+	battery_hdc_min="-100"
+	battery_hdc_max="140"
 
 	# Loop
 	while [ 1 ];
@@ -136,7 +126,9 @@ run () {
 		fi
 
 		if [ "x$battery_hdc_temp" != "x" ] ; then
-			echo "$get_time,$battery_hdc_temp" >> ${wdir}/battery_hdc_temp_data.csv
+			if [ 0 -eq "$(echo "${battery_hdc_temp} > ${battery_hdc_max}" | bc)" ] ; then
+				echo "$get_time,$battery_hdc_temp" >> ${wdir}/battery_hdc_temp_data.csv
+			fi
 		fi
 
 		if [ "x$pth_pressure" != "x" ] ; then
@@ -151,16 +143,6 @@ run () {
 			echo "$get_time,$pth_humidity" >> ${wdir}/pth_humidity_data.csv
 		fi
 
-#
-#		if [ "x$wbh" != "x" ] ; then
-#			if [ 1 -eq "$(echo "${wbh} > ${wbh_max}" | bc)" ] ; then
-#				wbh=${wbh_max}
-#			fi
-#
-#			echo "wbh=[$wbh]"
-#			echo "$get_time,$wbh" >> ${wdir}/wbh_data.csv
-#		fi
-#
 #		if [ "x$wlh" != "x" ] ; then
 #			if [ 1 -eq "$(echo "${wlh} > ${wlh_max}" | bc)" ] ; then
 #				wlh=${wlh_max}
