@@ -38,7 +38,8 @@ run () {
 	stty -F ${port} raw speed 57600 &> /dev/null
 
 	battery_hdc_min="-100"
-	battery_hdc_max="140"
+	max_temperature="140"
+	max_pressure="2000"
 
 	# Loop
 	while [ 1 ];
@@ -126,17 +127,21 @@ run () {
 		fi
 
 		if [ "x$battery_hdc_temp" != "x" ] ; then
-			if [ 0 -eq "$(echo "${battery_hdc_temp} > ${battery_hdc_max}" | bc)" ] ; then
+			if [ 0 -eq "$(echo "${battery_hdc_temp} > ${max_temperature}" | bc)" ] ; then
 				echo "$get_time,$battery_hdc_temp" >> ${wdir}/battery_hdc_temp_data.csv
 			fi
 		fi
 
 		if [ "x$pth_pressure" != "x" ] ; then
-			echo "$get_time,$pth_pressure" >> ${wdir}/pth_pressure_data.csv
+			if [ 0 -eq "$(echo "${pth_pressure} > ${max_pressure}" | bc)" ] ; then
+				echo "$get_time,$pth_pressure" >> ${wdir}/pth_pressure_data.csv
+			fi
 		fi
 
 		if [ "x$pth_temp" != "x" ] ; then
-			echo "$get_time,$pth_temp" >> ${wdir}/pth_temp_data.csv
+			if [ 0 -eq "$(echo "${pth_temp} > ${max_temperature}" | bc)" ] ; then
+				echo "$get_time,$pth_temp" >> ${wdir}/pth_temp_data.csv
+			fi
 		fi
 
 		if [ "x$pth_humidity" != "x" ] ; then

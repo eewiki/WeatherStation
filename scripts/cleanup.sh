@@ -22,6 +22,12 @@ new_day () {
 
 	wfile="twelvev_voltage_data.csv" ; seven_day
 	wfile="twelvev_current_data.csv" ; seven_day
+
+	wfile="battery_hdc_temp_data.csv" ; seven_day
+
+	wfile="pth_pressure_data.csv" ; seven_day
+	wfile="pth_temp_data.csv" ; seven_day
+	wfile="pth_humidity_data.csv" ; seven_day
 }
 
 new_day
