@@ -45,7 +45,7 @@ run () {
 	while [ 1 ];
 	do
 		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "MsgFrom:" -q ":#"`
-		echo "[$READ]"
+		echo "[$READ]:[`date`]"
 
 		solar_volt=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
 		echo "solar_volt=[$solar_volt]"
