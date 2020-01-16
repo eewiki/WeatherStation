@@ -6,7 +6,7 @@
 	</head>
 <body>
 
-<div id="graphdiv_battery_hdc_temp"></div>
+<div id="graphdiv_battery_hdc_temp" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_battery_hdc_temp"),
@@ -14,13 +14,14 @@
 		{
 			labels: [ 'Date', 'Temperature'],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'Battery Temperature',
 			ylabel: 'Temperature (F)',
 		}
 	);
 </script>
 
-<div id="graphdiv_solar_voltage"></div>
+<div id="graphdiv_solar_voltage" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_solar_voltage"),
@@ -28,6 +29,7 @@
 		{
 			labels: [ 'Date', 'Solar'],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'Solar Voltage',
 			axes: {
 				y: {
@@ -35,11 +37,12 @@
 				},
 			},
 			ylabel: 'Voltage (V)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
 
-<div id="graphdiv_solar_current"></div>
+<div id="graphdiv_solar_current" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_solar_current"),
@@ -47,6 +50,7 @@
 		{
 			labels: [ 'Date', 'Solar' ],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'Solar Current',
 			axes: {
 				y: {
@@ -54,11 +58,12 @@
 				},
 			},
 			ylabel: 'Current (mA)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
 
-<div id="graphdiv_battery_voltage"></div>
+<div id="graphdiv_battery_voltage" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_battery_voltage"),
@@ -66,6 +71,7 @@
 		{
 			labels: [ 'Date', 'Battery'],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'Battery Voltage',
 			axes: {
 				y: {
@@ -73,11 +79,12 @@
 				},
 			},
 			ylabel: 'Voltage (V)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
 
-<div id="graphdiv_battery_current"></div>
+<div id="graphdiv_battery_current" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_battery_current"),
@@ -85,6 +92,7 @@
 		{
 			labels: [ 'Date', 'Battery' ],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'Battery Current',
 			axes: {
 				y: {
@@ -92,11 +100,12 @@
 				},
 			},
 			ylabel: 'Current (mA)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
 
-<div id="graphdiv_fivev_voltage"></div>
+<div id="graphdiv_fivev_voltage" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_fivev_voltage"),
@@ -104,6 +113,7 @@
 		{
 			labels: [ 'Date', '5V Rail'],
 			rollPeriod: 12,
+			showRoller: true,
 			title: '5V Rail Voltage',
 			axes: {
 				y: {
@@ -111,11 +121,12 @@
 				},
 			},
 			ylabel: 'Voltage (V)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
 
-<div id="graphdiv_fivev_current"></div>
+<div id="graphdiv_fivev_current" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_fivev_current"),
@@ -123,6 +134,7 @@
 		{
 			labels: [ 'Date', '5V Rail' ],
 			rollPeriod: 12,
+			showRoller: true,
 			title: '5V Rail Current',
 			axes: {
 				y: {
@@ -130,11 +142,12 @@
 				},
 			},
 			ylabel: 'Current (mA)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
 
-<div id="graphdiv_twelvev_voltage"></div>
+<div id="graphdiv_twelvev_voltage" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_twelvev_voltage"),
@@ -142,6 +155,7 @@
 		{
 			labels: [ 'Date', '12V Rail'],
 			rollPeriod: 12,
+			showRoller: true,
 			title: '12V Rail Voltage',
 			axes: {
 				y: {
@@ -149,11 +163,12 @@
 				},
 			},
 			ylabel: 'Voltage (V)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
 
-<div id="graphdiv_twelvev_current"></div>
+<div id="graphdiv_twelvev_current" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_twelvev_current"),
@@ -161,6 +176,7 @@
 		{
 			labels: [ 'Date', '12V Rail' ],
 			rollPeriod: 12,
+			showRoller: true,
 			title: '12V Rail Current',
 			axes: {
 				y: {
@@ -168,6 +184,7 @@
 				},
 			},
 			ylabel: 'Current (mA)',
+			drawAxesAtZero: true,
 		}
 	);
 </script>
