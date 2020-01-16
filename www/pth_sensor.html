@@ -6,7 +6,7 @@
 	</head>
 <body>
 
-<div id="graphdiv_pth_pressure"></div>
+<div id="graphdiv_pth_pressure" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_pth_pressure"),
@@ -14,13 +14,14 @@
 		{
 			labels: [ 'Date', 'Pressure (mB)' ],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'PTH Pressure',
 			ylabel: 'Pressure (mB)',
 		}
 	);
 </script>
 
-<div id="graphdiv_pth_temp"></div>
+<div id="graphdiv_pth_temp" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_pth_temp"),
@@ -28,13 +29,14 @@
 		{
 			labels: [ 'Date', 'Temperature (F)' ],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'PTH Temperature',
 			ylabel: 'Degrees (F)',
 		}
 	);
 </script>
 
-<div id="graphdiv_pth_humidity"></div>
+<div id="graphdiv_pth_humidity" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(
 		document.getElementById("graphdiv_pth_humidity"),
@@ -42,6 +44,7 @@
 		{
 			labels: [ 'Date', 'humidity (%)' ],
 			rollPeriod: 12,
+			showRoller: true,
 			title: 'PTH Humidity',
 			axes: {
 				y: {
