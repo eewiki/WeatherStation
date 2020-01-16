@@ -41,32 +41,36 @@ run () {
 	max_temperature="140"
 	max_pressure="2000"
 
+	echo "Logging to: /var/www/html/dygraphs/data/log.txt"
+
 	# Loop
 	while [ 1 ];
 	do
 		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "MsgFrom:" -q ":#"`
-		echo "[$READ]:[`date`]"
+		echo "[$READ]:[`date`]" >> /var/www/html/dygraphs/data/log.txt
 
 		solar_volt=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
-		echo "solar_volt=[$solar_volt]"
+		echo "solar_volt=[$solar_volt]" >> /var/www/html/dygraphs/data/log.txt
+
 		solar_mamp=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
-		echo "solar_mamp=[$solar_mamp]"
+		echo "solar_mamp=[$solar_mamp]" >> /var/www/html/dygraphs/data/log.txt
 
 		battery_volt=$(echo $READ | grep -a '0013A20041A7AE31:Battery:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
-		echo "battery_volt=[$battery_volt]"
+		echo "battery_volt=[$battery_volt]" >> /var/www/html/dygraphs/data/log.txt
+
 		battery_mamp=$(echo $READ | grep -a '0013A20041A7AE31:Battery:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
-		echo "battery_mamp=[$battery_mamp]"
+		echo "battery_mamp=[$battery_mamp]" >> /var/www/html/dygraphs/data/log.txt
 
 		fivev_volt=$(echo $READ | grep -a '0013A20041A7AE31:5V_Rail:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
 		if [ "x$fivev_volt" != "xIN" ] ; then
-			echo "fivev_volt=[$fivev_volt]"
+			echo "fivev_volt=[$fivev_volt]" >> /var/www/html/dygraphs/data/log.txt
 		else
 			unset fivev_volt
 		fi
 
 		fivev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:5V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
 		if [ "x$fivev_mamp" != "xINVALID" ] ; then
-			echo "fivev_mamp=[$fivev_mamp]"
+			echo "fivev_mamp=[$fivev_mamp]" >> /var/www/html/dygraphs/data/log.txt
 		else
 			unset fivev_mamp
 		fi
@@ -74,33 +78,33 @@ run () {
 
 		twelvev_volt=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
 		if [ "x$twelvev_volt" != "xIN" ] ; then
-			echo "twelvev_volt=[$twelvev_volt]"
+			echo "twelvev_volt=[$twelvev_volt]" >> /var/www/html/dygraphs/data/log.txt
 		else
 			unset twelvev_volt
 		fi
 
 		twelvev_mamp=$(echo $READ | grep -a '0013A20041A7AE31:12V_Rail:' | grep -a Current | awk -F ':' '{print $8}' | awk -F 'mA' '{print $1}' || true)
 		if [ "x$twelvev_mamp" != "xINVALID" ] ; then
-			echo "twelvev_mamp=[$twelvev_mamp]"
+			echo "twelvev_mamp=[$twelvev_mamp]" >> /var/www/html/dygraphs/data/log.txt
 		else
 			unset twelvev_mamp
 		fi
 
 		battery_hdc_temp=$(echo $READ | grep -a '0013A20041A7AE31:HDC1080:' | grep -a Temperature | awk -F ':' '{print $6}' | awk -F 'F' '{print $1}' || true)
 		if [ "x$battery_hdc_temp" != "xINVALID" ] ; then
-			echo "battery_hdc_temp=[$battery_hdc_temp]"
+			echo "battery_hdc_temp=[$battery_hdc_temp]" >> /var/www/html/dygraphs/data/log.txt
 		else
 			unset battery_hdc_temp
 		fi
 
 		pth_pressure=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Press | awk -F ':' '{print $6}' | awk -F 'mB' '{print $1}' || true)
-		echo "pth_pressure=[$pth_pressure]"
+		echo "pth_pressure=[$pth_pressure]" >> /var/www/html/dygraphs/data/log.txt
 
 		pth_temp=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Temp | awk -F ':' '{print $8}' | awk -F 'F' '{print $1}' || true)
-		echo "pth_temp=[$pth_temp]"
+		echo "pth_temp=[$pth_temp]" >> /var/www/html/dygraphs/data/log.txt
 
 		pth_humidity=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Humidity | awk -F ':' '{print $10}' | awk -F '%' '{print $1}' || true)
-		echo "pth_humidity=[$pth_humidity]"
+		echo "pth_humidity=[$pth_humidity]" >> /var/www/html/dygraphs/data/log.txt
 
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
 		get_time_weather=$(env TZ=America/North_Dakota/Center date +"%Y-%m-%dT%k:%M:%S")
