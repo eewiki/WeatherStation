@@ -108,7 +108,11 @@ run () {
 
 		if [ "x$solar_volt" != "x" ] && [ "x$solar_mamp" != "x" ] ; then
 			echo "$get_time,$solar_volt" >> ${wdir}/solar_voltage_data.csv
-			echo "$get_time,$solar_mamp" >> ${wdir}/solar_current_data.csv
+			if [ 1 -eq "$(echo "${solar_mamp} > 0" | bc)" ] ; then
+				echo "$get_time,$solar_mamp" >> ${wdir}/solar_current_data.csv
+			else
+				echo "$get_time,0" >> ${wdir}/solar_current_data.csv
+			fi
 		fi
 
 		if [ "x$battery_volt" != "x" ] && [ "x$battery_mamp" != "x" ] ; then
