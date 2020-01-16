@@ -28,6 +28,8 @@ new_day () {
 	wfile="pth_pressure_data.csv" ; seven_day
 	wfile="pth_temp_data.csv" ; seven_day
 	wfile="pth_humidity_data.csv" ; seven_day
+
+	echo "NewDay:" > /var/www/html/dygraphs/data/log.txt
 }
 
 new_day
