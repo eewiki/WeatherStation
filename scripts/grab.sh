@@ -103,7 +103,7 @@ run () {
 		pth_temp=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Temp | awk -F ':' '{print $8}' | awk -F 'F' '{print $1}' || true)
 		echo "pth_temp=[$pth_temp]" >> /var/www/html/dygraphs/data/log.txt
 
-		pth_temp=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Temp1 | awk -F ':' '{print $10}' | awk -F 'F' '{print $1}' || true)
+		mcp_temp=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Temp1 | awk -F ':' '{print $10}' | awk -F 'F' '{print $1}' || true)
 		echo "mcp_temp=[$mcp_temp]" >> /var/www/html/dygraphs/data/log.txt
 
 		pth_humidity=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Humidity | awk -F ':' '{print $12}' | awk -F '%' '{print $1}' || true)
