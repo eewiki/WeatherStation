@@ -21,6 +21,36 @@
 	);
 </script>
 
+<div id="graphdiv_1B29_temp" style="width:600px; height:300px;"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_1B29_temp"),
+		"data/1B29_temp_data.csv",
+		{
+			labels: [ 'Date', 'PTH Sensor', 'MCP Sensor' ],
+			rollPeriod: 12,
+			showRoller: true,
+			title: 'Temperature',
+			ylabel: 'Degrees (F)',
+		}
+	);
+</script>
+
+<div id="graphdiv_mcp_temp" style="width:600px; height:300px;"></div>
+<script type="text/javascript">
+	g = new Dygraph(
+		document.getElementById("graphdiv_mcp_temp"),
+		"data/mcp_temp_data.csv",
+		{
+			labels: [ 'Date', 'Temperature (F)' ],
+			rollPeriod: 12,
+			showRoller: true,
+			title: 'MCP Temperature',
+			ylabel: 'Degrees (F)',
+		}
+	);
+</script>
+
 <div id="graphdiv_pth_temp" style="width:600px; height:300px;"></div>
 <script type="text/javascript">
 	g = new Dygraph(

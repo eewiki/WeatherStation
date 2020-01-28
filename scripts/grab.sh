@@ -103,7 +103,10 @@ run () {
 		pth_temp=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Temp | awk -F ':' '{print $8}' | awk -F 'F' '{print $1}' || true)
 		echo "pth_temp=[$pth_temp]" >> /var/www/html/dygraphs/data/log.txt
 
-		pth_humidity=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Humidity | awk -F ':' '{print $10}' | awk -F '%' '{print $1}' || true)
+		pth_temp=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Temp1 | awk -F ':' '{print $10}' | awk -F 'F' '{print $1}' || true)
+		echo "mcp_temp=[$mcp_temp]" >> /var/www/html/dygraphs/data/log.txt
+
+		pth_humidity=$(echo $READ | grep -a '0013A20041981B29:PTH_sensor:' | grep -a Humidity | awk -F ':' '{print $12}' | awk -F '%' '{print $1}' || true)
 		echo "pth_humidity=[$pth_humidity]" >> /var/www/html/dygraphs/data/log.txt
 
 		get_time=$(env TZ=America/North_Dakota/Center date +"%Y/%m/%d %k:%M:%S")
@@ -149,6 +152,18 @@ run () {
 		if [ "x$pth_temp" != "x" ] ; then
 			if [ 0 -eq "$(echo "${pth_temp} > ${max_temperature}" | bc)" ] ; then
 				echo "$get_time,$pth_temp" >> ${wdir}/pth_temp_data.csv
+			fi
+		fi
+
+		if [ "x$mcp_temp" != "x" ] ; then
+			if [ 0 -eq "$(echo "${mcp_temp} > ${max_temperature}" | bc)" ] ; then
+				echo "$get_time,$mcp_temp," >> ${wdir}/mcp_temp_data.csv
+			fi
+		fi
+
+		if [ "x$pth_temp" != "x" ] && [ "x$mcp_temp" != "x" ] ; then
+			if [ 0 -eq "$(echo "${pth_temp} > ${max_temperature}" | bc)" ] && [ 0 -eq "$(echo "${mcp_temp} > ${max_temperature}" | bc)" ] ; then
+				echo "$get_time,$pth_temp,$mcp_temp" >> ${wdir}/1B29_temp_data.csv
 			fi
 		fi
 
