@@ -157,7 +157,7 @@ run () {
 
 		if [ "x$mcp_temp" != "x" ] ; then
 			if [ 0 -eq "$(echo "${mcp_temp} > ${max_temperature}" | bc)" ] ; then
-				echo "$get_time,$mcp_temp," >> ${wdir}/mcp_temp_data.csv
+				echo "$get_time,$mcp_temp" >> ${wdir}/mcp_temp_data.csv
 			fi
 		fi
 
