@@ -141,7 +141,7 @@ run () {
 			if [ 0 -eq "$(echo "${battery_hdc_temp} > ${max_temperature}" | bc)" ] ; then
 				echo "$get_time,$battery_hdc_temp" >> ${wdir}/battery_hdc_temp_data.csv
 				if [ -f /home/debian/send.data ] ; then
-					curl -X POST "http://192.168.0.114:8100/v1/data/for/WeatherStationAgain?Key1=${battery_hdc_temp}"
+					curl -X POST "http://192.168.0.114:8100/v1/data/for/Battery_hdc_temp?Key1=${battery_hdc_temp}"
 				fi
 			fi
 		fi
