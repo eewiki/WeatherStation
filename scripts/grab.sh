@@ -117,6 +117,9 @@ run () {
 			echo "$get_time,$solar_volt" >> ${wdir}/solar_voltage_data.csv
 			if [ 1 -eq "$(echo "${solar_mamp} > 0" | bc)" ] ; then
 				echo "$get_time,$solar_mamp" >> ${wdir}/solar_current_data.csv
+				if [ -f /home/debian/send.data ] ; then
+					curl -X POST "http://192.168.0.114:8100/v1/data/for/Solar?volt=${solar_volt}&mamp=${solar_mamp}"
+				fi
 			else
 				echo "$get_time,0" >> ${wdir}/solar_current_data.csv
 			fi
@@ -125,23 +128,32 @@ run () {
 		if [ "x$battery_volt" != "x" ] && [ "x$battery_mamp" != "x" ] ; then
 			echo "$get_time,$battery_volt" >> ${wdir}/battery_voltage_data.csv
 			echo "$get_time,$battery_mamp" >> ${wdir}/battery_current_data.csv
+			if [ -f /home/debian/send.data ] ; then
+				curl -X POST "http://192.168.0.114:8100/v1/data/for/Battery?volt=${battery_volt}&mamp=${battery_mamp}"
+			fi
 		fi
 
 		if [ "x$fivev_volt" != "x" ] && [ "x$fivev_mamp" != "x" ] ; then
 			echo "$get_time,$fivev_volt" >> ${wdir}/fivev_voltage_data.csv
 			echo "$get_time,$fivev_mamp" >> ${wdir}/fivev_current_data.csv
+			if [ -f /home/debian/send.data ] ; then
+				curl -X POST "http://192.168.0.114:8100/v1/data/for/5VRail?volt=${fivev_volt}&mamp=${fivev_mamp}"
+			fi
 		fi
 
 		if [ "x$twelvev_volt" != "x" ] && [ "x$twelvev_mamp" != "x" ] ; then
 			echo "$get_time,$twelvev_volt" >> ${wdir}/twelvev_voltage_data.csv
 			echo "$get_time,$twelvev_mamp" >> ${wdir}/twelvev_current_data.csv
+			if [ -f /home/debian/send.data ] ; then
+				curl -X POST "http://192.168.0.114:8100/v1/data/for/12VRail?volt=${twelvev_volt}&mamp=${twelvev_mamp}"
+			fi
 		fi
 
 		if [ "x$battery_hdc_temp" != "x" ] ; then
 			if [ 0 -eq "$(echo "${battery_hdc_temp} > ${max_temperature}" | bc)" ] ; then
 				echo "$get_time,$battery_hdc_temp" >> ${wdir}/battery_hdc_temp_data.csv
 				if [ -f /home/debian/send.data ] ; then
-					curl -X POST "http://192.168.0.114:8100/v1/data/for/Battery_hdc_temp?Key1=${battery_hdc_temp}"
+					curl -X POST "http://192.168.0.114:8100/v1/data/for/Battery_Temp?Temperature=${battery_hdc_temp}"
 				fi
 			fi
 		fi
