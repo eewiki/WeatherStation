@@ -19,6 +19,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
+ * Slot: A: XBee Click
  * Slot: B: Thunder Click
  * Slot: C: Weather Click
  * Slot: D: Air Quality 4 Click
@@ -90,9 +91,10 @@ void bump_counter() {
 
 void setup()
 {
-	Serial.begin(57600);
-	Serial.println("MIKROESAM3X_DEBUG:MIKROE SAM3X WeatherDemo:#");
-
+	/* Serial = Board USB, Serial1 = Slot A Tx/Rx */
+	Serial1.begin(57600);
+	Serial1.println("MIKROESAM3X_DEBUG:MIKROE SAM3X WeatherDemo:#");
+	
 	bme_init();
 	sgp_init();
 
@@ -108,21 +110,21 @@ void loop()
 		if(digitalRead(AS3935_INT) == HIGH) {
 			AS3935_intVal = lightning.readInterruptReg();
 			if(AS3935_intVal == AS3935_NOISE_INT) {
-				Serial.println("MIKROESAM3X_DEBUG: Noise:#");
+				Serial1.println("MIKROESAM3X_DEBUG: Noise:#");
 			}
 			else if(AS3935_intVal == AS3935_DISTURBER_INT) {
-				Serial.println("MIKROESAM3X_DEBUG: Disturber:#"); 
+				Serial1.println("MIKROESAM3X_DEBUG: Disturber:#"); 
 			}
 			else if(AS3935_intVal == AS3935_LIGHTNING_INT) {
 				bump_counter();
-				Serial.print("MIKROESAM3X_AS3935:"); 
-				Serial.print(counter);
-				Serial.print(":Lightning:");
+				Serial1.print("MIKROESAM3X_AS3935:"); 
+				Serial1.print(counter);
+				Serial1.print(":Lightning:");
 				// Lightning! Now how far away is it? Distance estimation takes into
 				// account any previously seen events in the last 15 seconds. 
 				byte distance = lightning.distanceToStorm(); 
-				Serial.print(distance); 
-				Serial.println("km:#");
+				Serial1.print(distance); 
+				Serial1.println("km:#");
 			}
 		}
 	}
@@ -140,7 +142,7 @@ void loop()
 
 void bme_init() {
 	if (! bme.begin(0x76, &Wire)) {
-		Serial.println("MIKROESAM3X_DEBUG:BME280: Sensor not found!:#");
+		Serial1.println("MIKROESAM3X_DEBUG:BME280: Sensor not found!:#");
 		has_bme=false;
 	}  
 }
@@ -148,30 +150,30 @@ void bme_init() {
 void bme_read() {
 	bump_counter();
 	bme.takeForcedMeasurement(); // has no effect in normal mode
-	Serial.print("MIKROESAM3X_WC:");
-	Serial.print(counter);
-	Serial.print(":Temp:");
+	Serial1.print("MIKROESAM3X_WC:");
+	Serial1.print(counter);
+	Serial1.print(":Temp:");
 	bme_temperature = bme.readTemperature();
 	float bme_temp_f = ((bme_temperature * 1.8) + 32);
-	Serial.print(bme_temp_f);
-	Serial.print("F:Press:");
-	Serial.print(bme.readPressure() / 100.0F);
-	Serial.print("mB:Humidity:");
+	Serial1.print(bme_temp_f);
+	Serial1.print("F:Press:");
+	Serial1.print(bme.readPressure() / 100.0F);
+	Serial1.print("mB:Humidity:");
 	bme_humidty = bme.readHumidity();
-	Serial.print(bme_humidty);
-	Serial.println("%:#");
+	Serial1.print(bme_humidty);
+	Serial1.println("%:#");
 }
 
 void sgp_init() {
 	if (! sgp.begin()) {
-		Serial.println("MIKROESAM3X_DEBUG:SGP30: Sensor not found!:#");
+		Serial1.println("MIKROESAM3X_DEBUG:SGP30: Sensor not found!:#");
         has_sgp=false;
     }
-	Serial.print("MIKROESAM3X_DEBUG:Found SGP30 serial:");
-	Serial.print(sgp.serialnumber[0], HEX);
-	Serial.print(sgp.serialnumber[1], HEX);
-	Serial.print(sgp.serialnumber[2], HEX);
-	Serial.println(":#");
+	Serial1.print("MIKROESAM3X_DEBUG:Found SGP30 serial:");
+	Serial1.print(sgp.serialnumber[0], HEX);
+	Serial1.print(sgp.serialnumber[1], HEX);
+	Serial1.print(sgp.serialnumber[2], HEX);
+	Serial1.println(":#");
 }
 
 void sgp_read() {
@@ -183,13 +185,13 @@ void sgp_read() {
 		sgp.setHumidity(getAbsoluteHumidity(bme_temperature, bme_humidty));
 	}
 	
-	Serial.print("MIKROESAM3X_AQC:");
-	Serial.print(counter);
-	Serial.print(":TVOC:");
-	Serial.print(sgp.TVOC);
-	Serial.print(":ppb:eCO2:");
-	Serial.print(sgp.eCO2);
-	Serial.println(":ppm:#");
+	Serial1.print("MIKROESAM3X_AQC:");
+	Serial1.print(counter);
+	Serial1.print(":TVOC:");
+	Serial1.print(sgp.TVOC);
+	Serial1.print(":ppb:eCO2:");
+	Serial1.print(sgp.eCO2);
+	Serial1.println(":ppm:#");
 
 	delay(1000);
 
@@ -199,14 +201,14 @@ void sgp_read() {
 
 		uint16_t TVOC_base, eCO2_base;
 		if (! sgp.getIAQBaseline(&eCO2_base, &TVOC_base)) {
-			Serial.println("MIKROESAM3X_DEBUG:Failed to get baseline readings:#");
+			Serial1.println("MIKROESAM3X_DEBUG:Failed to get baseline readings:#");
 			return;
 		}
-		Serial.print("MIKROESAM3X_DEBUG:Baseline values: eCO2: 0x");
-		Serial.print(eCO2_base, HEX);
-		Serial.print(" & TVOC: 0x");
-		Serial.print(TVOC_base, HEX);
-		Serial.println(":#");
+		Serial1.print("MIKROESAM3X_DEBUG:Baseline values: eCO2: 0x");
+		Serial1.print(eCO2_base, HEX);
+		Serial1.print(" & TVOC: 0x");
+		Serial1.print(TVOC_base, HEX);
+		Serial1.println(":#");
 	}
 }
 
@@ -217,11 +219,11 @@ void thunder_init()
 	pinMode(AS3935_INT, INPUT);
 
 	if( !lightning.beginSPI(AS3935_CS, 2000000) ){ 
-		Serial.println ("MIKROESAM3X_DEBUG:Lightning Detector did not start up, freezing:#");; 
+		Serial1.println ("MIKROESAM3X_DEBUG:Lightning Detector did not start up, freezing:#");; 
 		has_thunder=false;
 	}
 	else
-		Serial.println("MIKROESAM3X_DEBUG:Lightning Detector Ready:#");
+		Serial1.println("MIKROESAM3X_DEBUG:Lightning Detector Ready:#");
 
 	if (has_thunder) {
 		lightning.setIndoorOutdoor(AS3935_OUTDOOR); 
