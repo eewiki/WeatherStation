@@ -19,6 +19,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
+ * Slot: B: Thunder Click
  * Slot: C: Weather Click
  * Slot: D: Air Quality 4 Click
  * 
@@ -34,8 +35,10 @@
 /* Adafruit SGP30 Sensor: 1.0.5 */
 #include <Adafruit_SGP30.h>
 
+/* Sparkfun AS3935 Lightning Detector Arduino Library 1.4.0 */
+#include "SparkFun_AS3935.h"
+
 #include "flip_click_defs.h"
-//#include "SparkFun_AS3935.h"
 
 Adafruit_BME280 bme; // I2C
 Adafruit_SGP30 sgp;
@@ -51,24 +54,21 @@ unsigned long delayTime;
 #define AS3935_CS  B_CS
 #define AS3935_INT B_INT
 
-//SparkFun_AS3935 lightning;
+SparkFun_AS3935 lightning;
 
 int AS3935_intVal = 0;
 int AS3935_noise = 2; // Value between 1-7 
 int AS3935_disturber = 2; // Value between 1-10
 
-const int TMP116_address    = 0x48;
-const int TMP116_temp_reg   = 0x00;  // Temperature register
-const int TMP116_config_reg = 0x01;  // Configuration register
-
 int counter=1000;
+int counter_sgp = 0;
 
 bool has_bme = true;
 bool has_sgp = true;
+bool has_thunder = true;
 
 volatile float bme_temperature = 0;
 volatile float bme_humidty = 0;
-
 
 /* return absolute humidity [mg/m^3] with approximation formula
 * @param temperature [°C]
@@ -91,45 +91,41 @@ void bump_counter() {
 void setup()
 {
 	Serial.begin(57600);
-	Serial.println("MIKROE SAM3X WeatherDemo:#");
+	Serial.println("MIKROESAM3X_DEBUG:MIKROE SAM3X WeatherDemo:#");
 
 	bme_init();
 	sgp_init();
 
-//  SPI.begin();
-//  SPI.setDataMode( SPI_MODE1 );
+	SPI.begin();
+	SPI.setDataMode( SPI_MODE1 );
 
-//  thunder_init();
-
-//  Wire.begin();
-
-//  tmp116_init();
+	thunder_init();
 }
 
-int counter_sgp = 0;
 void loop()
 {
-//  double temp = TMP116_ReadTempSensor();
-//  Serial.println(temp);
-  
-//  if(digitalRead(AS3935_INT) == HIGH){
-//    AS3935_intVal = lightning.readInterruptReg();
-//    if(AS3935_intVal == AS3935_NOISE_INT){
-//      Serial.println("debug: Noise."); 
-//    }
-//    else if(AS3935_intVal == AS3935_DISTURBER_INT){
-//      Serial.println("debug: Disturber."); 
-//    }
-//    else if(AS3935_intVal == AS3935_LIGHTNING_INT){
-//      Serial.println("debug: Lightning Strike Detected!"); 
-//      // Lightning! Now how far away is it? Distance estimation takes into
-//      // account any previously seen events in the last 15 seconds. 
-//      byte distance = lightning.distanceToStorm(); 
-//      Serial.print("Approximately: "); 
-//      Serial.print(distance); 
-//      Serial.println("km away!"); 
-//    }
-//  }
+	if (has_thunder) {
+		if(digitalRead(AS3935_INT) == HIGH) {
+			AS3935_intVal = lightning.readInterruptReg();
+			if(AS3935_intVal == AS3935_NOISE_INT) {
+				Serial.println("MIKROESAM3X_DEBUG: Noise:#");
+			}
+			else if(AS3935_intVal == AS3935_DISTURBER_INT) {
+				Serial.println("MIKROESAM3X_DEBUG: Disturber:#"); 
+			}
+			else if(AS3935_intVal == AS3935_LIGHTNING_INT) {
+				bump_counter();
+				Serial.print("MIKROESAM3X_AS3935:"); 
+				Serial.print(counter);
+				Serial.print(":Lightning:");
+				// Lightning! Now how far away is it? Distance estimation takes into
+				// account any previously seen events in the last 15 seconds. 
+				byte distance = lightning.distanceToStorm(); 
+				Serial.print(distance); 
+				Serial.println("km:#");
+			}
+		}
+	}
 
 	if (has_bme) {
 		bme_read();
@@ -144,7 +140,7 @@ void loop()
 
 void bme_init() {
 	if (! bme.begin(0x76, &Wire)) {
-		Serial.println("BME280: Sensor not found!:#");
+		Serial.println("MIKROESAM3X_DEBUG:BME280: Sensor not found!:#");
 		has_bme=false;
 	}  
 }
@@ -168,10 +164,10 @@ void bme_read() {
 
 void sgp_init() {
 	if (! sgp.begin()) {
-		Serial.println("SGP30: Sensor not found!:#");
+		Serial.println("MIKROESAM3X_DEBUG:SGP30: Sensor not found!:#");
         has_sgp=false;
     }
-	Serial.print("Found SGP30 serial #");
+	Serial.print("MIKROESAM3X_DEBUG:Found SGP30 serial:");
 	Serial.print(sgp.serialnumber[0], HEX);
 	Serial.print(sgp.serialnumber[1], HEX);
 	Serial.print(sgp.serialnumber[2], HEX);
@@ -203,10 +199,10 @@ void sgp_read() {
 
 		uint16_t TVOC_base, eCO2_base;
 		if (! sgp.getIAQBaseline(&eCO2_base, &TVOC_base)) {
-			Serial.println("Failed to get baseline readings:#");
+			Serial.println("MIKROESAM3X_DEBUG:Failed to get baseline readings:#");
 			return;
 		}
-		Serial.print("****Baseline values: eCO2: 0x");
+		Serial.print("MIKROESAM3X_DEBUG:Baseline values: eCO2: 0x");
 		Serial.print(eCO2_base, HEX);
 		Serial.print(" & TVOC: 0x");
 		Serial.print(TVOC_base, HEX);
@@ -216,62 +212,18 @@ void sgp_read() {
 
 void thunder_init()
 {
-  pinMode(AS3935_CS, OUTPUT);
-  digitalWrite(AS3935_CS, HIGH);
-  pinMode(AS3935_INT, INPUT);
+	pinMode(AS3935_CS, OUTPUT);
+	digitalWrite(AS3935_CS, HIGH);
+	pinMode(AS3935_INT, INPUT);
 
-//  if( !lightning.beginSPI(AS3935_CS, 2000000) ){ 
-//    Serial.println ("debug: Lightning Detector did not start up, freezing!"); 
-//    while(1); 
-//  }
-//  else
-//    Serial.println("debug: Lightning Detector Ready!");
+	if( !lightning.beginSPI(AS3935_CS, 2000000) ){ 
+		Serial.println ("MIKROESAM3X_DEBUG:Lightning Detector did not start up, freezing:#");; 
+		has_thunder=false;
+	}
+	else
+		Serial.println("MIKROESAM3X_DEBUG:Lightning Detector Ready:#");
 
-  //lightning.setIndoorOutdoor(AS3935_OUTDOOR); 
-}
-
-double TMP116_ReadTempSensor(void){
-  uint8_t data[2]; 
-  int16_t datac;
-
-  Wire.beginTransmission(TMP116_address); 
-  Wire.write(TMP116_temp_reg); 
-  Wire.endTransmission(); 
-
-  delay(10); 
-
-  Wire.requestFrom(TMP116_address,2); 
-
-  if(Wire.available() <= 2){  
-    data[0] = Wire.read(); 
-    data[1] = Wire.read(); 
-
-    datac = ((data[0] << 8) | data[1]); 
-
-    return datac*0.0078125; 
-  }
-}
-
-void tmp116_init(){
-  // Configuration Register: Default is 0x02, 0x20
-  // 11:10 MOD[1:0]
-  // 00: Continuous conversion (CC) - default
-  // 01: Shutdown (SD)
-  // 10: Continuous conversion (CC), same as 00 (reads back = 00)
-  // 11: One-shot conversion (OS)
-  // 9:7 CONV[2:0] http://www.ti.com/lit/ds/symlink/tmp116.pdf
-  // 100: - default
-  // 6:5 AVG[1:0]
-  // 01: - default 
-  // Default = 8 samples, 1 second
-  i2cwrite(TMP116_address, TMP116_config_reg, 0x02, 0x20);  
-}
-
-double i2cwrite(int device_addr, int register_addr, int high_bytes, int low_bytes){
-  Wire.beginTransmission(device_addr); 
-  Wire.write(register_addr);
-  Wire.write(high_bytes);
-  Wire.write(low_bytes);
-  Wire.endTransmission();
-  delay(10);
+	if (has_thunder) {
+		lightning.setIndoorOutdoor(AS3935_OUTDOOR); 
+	}
 }
