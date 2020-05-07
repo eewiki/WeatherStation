@@ -41,10 +41,8 @@
 
 #include "flip_click_defs.h"
 
-Adafruit_BME280 bme; // I2C
+Adafruit_BME280 bme;
 Adafruit_SGP30 sgp;
-
-unsigned long delayTime;
 
 #define AS3935_INDOOR 0x12 
 #define AS3935_OUTDOOR 0xE
@@ -137,14 +135,15 @@ void loop()
 		sgp_read();
 	}
 
-	delay(5000); // wait 5 seconds for the next I2C scan
+	delay(5000); // wait 5 seconds between reads
 }
 
 void bme_init() {
 	if (! bme.begin(0x76, &Wire)) {
 		Serial1.println("MIKROESAM3X_DEBUG:BME280: Sensor not found!:#");
 		has_bme=false;
-	}  
+	}
+	Serial1.println("MIKROESAM3X_DEBUG:Found BME280:#");
 }
 
 void bme_read() {
@@ -178,7 +177,10 @@ void sgp_init() {
 
 void sgp_read() {
 	bump_counter();
-	// If you have a temperature / humidity sensor, you can set the absolute humidity to enable the humditiy compensation for the air quality signals
+	/*
+	 *If you have a temperature / humidity sensor, you can set the absolute humidity 
+	 *to enable the humditiy compensation for the air quality signals
+	 */
 	//float bme_temperature = 22.1; // [°C]
 	//float bme_humidty = 45.2; // [%RH]
 	if (has_bme) {
