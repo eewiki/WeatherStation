@@ -61,7 +61,7 @@ const int TMP116_address    = 0x48;
 const int TMP116_temp_reg   = 0x00;  // Temperature register
 const int TMP116_config_reg = 0x01;  // Configuration register
 
-int counter=10;
+int counter=1000;
 
 bool has_bme = true;
 bool has_sgp = true;
@@ -79,6 +79,13 @@ uint32_t getAbsoluteHumidity(float temperature, float humidity) {
     const float absoluteHumidity = 216.7f * ((humidity / 100.0f) * 6.112f * exp((17.62f * temperature) / (243.12f + temperature)) / (273.15f + temperature)); // [g/m^3]
     const uint32_t absoluteHumidityScaled = static_cast<uint32_t>(1000.0f * absoluteHumidity); // [mg/m^3]
     return absoluteHumidityScaled;
+}
+
+void bump_counter() {
+	counter++;
+	if (counter == 10000) {
+		counter = 1000;
+	}
 }
 
 void setup()
@@ -132,11 +139,6 @@ void loop()
 		sgp_read();
 	}
 
-	counter++;
-	if (counter == 100) {
-		counter = 10;
-	}
-
 	delay(5000); // wait 5 seconds for the next I2C scan
 }
 
@@ -148,6 +150,7 @@ void bme_init() {
 }
 
 void bme_read() {
+	bump_counter();
 	bme.takeForcedMeasurement(); // has no effect in normal mode
 	Serial.print("MIKROESAM3X_WC:");
 	Serial.print(counter);
@@ -176,23 +179,22 @@ void sgp_init() {
 }
 
 void sgp_read() {
+	bump_counter();
 	// If you have a temperature / humidity sensor, you can set the absolute humidity to enable the humditiy compensation for the air quality signals
 	//float bme_temperature = 22.1; // [°C]
 	//float bme_humidty = 45.2; // [%RH]
 	if (has_bme) {
 		sgp.setHumidity(getAbsoluteHumidity(bme_temperature, bme_humidty));
 	}
-
-	Serial.print("TVOC "); Serial.print(sgp.TVOC); Serial.print(" ppb\t");
-	Serial.print("eCO2 "); Serial.print(sgp.eCO2); Serial.println(" ppm");
-
-	if (! sgp.IAQmeasureRaw()) {
-		Serial.println("Raw Measurement failed");
-		return;
-	}
-	Serial.print("Raw H2 "); Serial.print(sgp.rawH2); Serial.print(" \t");
-	Serial.print("Raw Ethanol "); Serial.print(sgp.rawEthanol); Serial.println("");
 	
+	Serial.print("MIKROESAM3X_AQC:");
+	Serial.print(counter);
+	Serial.print(":TVOC:");
+	Serial.print(sgp.TVOC);
+	Serial.print(":ppb:eCO2:");
+	Serial.print(sgp.eCO2);
+	Serial.println(":ppm:#");
+
 	delay(1000);
 
 	counter_sgp++;
@@ -201,11 +203,14 @@ void sgp_read() {
 
 		uint16_t TVOC_base, eCO2_base;
 		if (! sgp.getIAQBaseline(&eCO2_base, &TVOC_base)) {
-			Serial.println("Failed to get baseline readings");
+			Serial.println("Failed to get baseline readings:#");
 			return;
 		}
-		Serial.print("****Baseline values: eCO2: 0x"); Serial.print(eCO2_base, HEX);
-		Serial.print(" & TVOC: 0x"); Serial.println(TVOC_base, HEX);
+		Serial.print("****Baseline values: eCO2: 0x");
+		Serial.print(eCO2_base, HEX);
+		Serial.print(" & TVOC: 0x");
+		Serial.print(TVOC_base, HEX);
+		Serial.println(":#");
 	}
 }
 
