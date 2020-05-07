@@ -19,7 +19,8 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
- * Slot: C: Weather Click  
+ * Slot: C: Weather Click
+ * Slot: D: Air Quality 4 Click
  * 
  ***************************************************************************/
 
@@ -30,10 +31,14 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 
+/* Adafruit SGP30 Sensor: 1.0.5 */
+#include <Adafruit_SGP30.h>
+
 #include "flip_click_defs.h"
 //#include "SparkFun_AS3935.h"
 
 Adafruit_BME280 bme; // I2C
+Adafruit_SGP30 sgp;
 
 unsigned long delayTime;
 
@@ -59,13 +64,30 @@ const int TMP116_config_reg = 0x01;  // Configuration register
 int counter=10;
 
 bool has_bme = true;
+bool has_sgp = true;
+
+volatile float bme_temperature = 0;
+volatile float bme_humidty = 0;
+
+
+/* return absolute humidity [mg/m^3] with approximation formula
+* @param temperature [°C]
+* @param humidity [%RH]
+*/
+uint32_t getAbsoluteHumidity(float temperature, float humidity) {
+    // approximation formula from Sensirion SGP30 Driver Integration chapter 3.15
+    const float absoluteHumidity = 216.7f * ((humidity / 100.0f) * 6.112f * exp((17.62f * temperature) / (243.12f + temperature)) / (273.15f + temperature)); // [g/m^3]
+    const uint32_t absoluteHumidityScaled = static_cast<uint32_t>(1000.0f * absoluteHumidity); // [mg/m^3]
+    return absoluteHumidityScaled;
+}
 
 void setup()
 {
-  Serial.begin(57600);
-  Serial.println("MIKROE SAM3X WeatherDemo");
+	Serial.begin(57600);
+	Serial.println("MIKROE SAM3X WeatherDemo:#");
 
-  bme_init();
+	bme_init();
+	sgp_init();
 
 //  SPI.begin();
 //  SPI.setDataMode( SPI_MODE1 );
@@ -77,6 +99,7 @@ void setup()
 //  tmp116_init();
 }
 
+int counter_sgp = 0;
 void loop()
 {
 //  double temp = TMP116_ReadTempSensor();
@@ -101,38 +124,89 @@ void loop()
 //    }
 //  }
 
-  bme_read();
+	if (has_bme) {
+		bme_read();
+	}
 
-  counter++;
-  if (counter == 100)
-  {
-    counter = 10;
-  }
+	if (has_sgp) {
+		sgp_read();
+	}
 
-  delay(5000); // wait 5 seconds for the next I2C scan
+	counter++;
+	if (counter == 100) {
+		counter = 10;
+	}
+
+	delay(5000); // wait 5 seconds for the next I2C scan
 }
 
 void bme_init() {
-   if (! bme.begin(0x76, &Wire)) {
-        Serial.println("Could not find a valid BME280 sensor, check wiring!");
-        has_bme=false;
-    }  
+	if (! bme.begin(0x76, &Wire)) {
+		Serial.println("BME280: Sensor not found!:#");
+		has_bme=false;
+	}  
 }
 
 void bme_read() {
-    bme.takeForcedMeasurement(); // has no effect in normal mode
+	bme.takeForcedMeasurement(); // has no effect in normal mode
+	Serial.print("MIKROESAM3X_WC:");
+	Serial.print(counter);
+	Serial.print(":Temp:");
+	bme_temperature = bme.readTemperature();
+	float bme_temp_f = ((bme_temperature * 1.8) + 32);
+	Serial.print(bme_temp_f);
+	Serial.print("F:Press:");
+	Serial.print(bme.readPressure() / 100.0F);
+	Serial.print("mB:Humidity:");
+	bme_humidty = bme.readHumidity();
+	Serial.print(bme_humidty);
+	Serial.println("%:#");
+}
 
-    Serial.print("MIKROESAM3X_WC:");
-    Serial.print(counter);
-    Serial.print(":Temp:");
-    float bme_temp_c = bme.readTemperature();
-    float bme_temp_f = ((bme_temp_c * 1.8) + 32);
-    Serial.print(bme_temp_f);
-    Serial.print("F:Press:");
-    Serial.print(bme.readPressure() / 100.0F);
-    Serial.print("mB:Humidity:");
-    Serial.print(bme.readHumidity());
-    Serial.println("%:#");
+void sgp_init() {
+	if (! sgp.begin()) {
+		Serial.println("SGP30: Sensor not found!:#");
+        has_sgp=false;
+    }
+	Serial.print("Found SGP30 serial #");
+	Serial.print(sgp.serialnumber[0], HEX);
+	Serial.print(sgp.serialnumber[1], HEX);
+	Serial.print(sgp.serialnumber[2], HEX);
+	Serial.println(":#");
+}
+
+void sgp_read() {
+	// If you have a temperature / humidity sensor, you can set the absolute humidity to enable the humditiy compensation for the air quality signals
+	//float bme_temperature = 22.1; // [°C]
+	//float bme_humidty = 45.2; // [%RH]
+	if (has_bme) {
+		sgp.setHumidity(getAbsoluteHumidity(bme_temperature, bme_humidty));
+	}
+
+	Serial.print("TVOC "); Serial.print(sgp.TVOC); Serial.print(" ppb\t");
+	Serial.print("eCO2 "); Serial.print(sgp.eCO2); Serial.println(" ppm");
+
+	if (! sgp.IAQmeasureRaw()) {
+		Serial.println("Raw Measurement failed");
+		return;
+	}
+	Serial.print("Raw H2 "); Serial.print(sgp.rawH2); Serial.print(" \t");
+	Serial.print("Raw Ethanol "); Serial.print(sgp.rawEthanol); Serial.println("");
+	
+	delay(1000);
+
+	counter_sgp++;
+	if (counter_sgp == 30) {
+		counter_sgp = 0;
+
+		uint16_t TVOC_base, eCO2_base;
+		if (! sgp.getIAQBaseline(&eCO2_base, &TVOC_base)) {
+			Serial.println("Failed to get baseline readings");
+			return;
+		}
+		Serial.print("****Baseline values: eCO2: 0x"); Serial.print(eCO2_base, HEX);
+		Serial.print(" & TVOC: 0x"); Serial.println(TVOC_base, HEX);
+	}
 }
 
 void thunder_init()
