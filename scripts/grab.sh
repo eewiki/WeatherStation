@@ -161,12 +161,18 @@ run () {
 		if [ "x$pth_pressure" != "x" ] ; then
 			if [ 0 -eq "$(echo "${pth_pressure} > ${max_pressure}" | bc)" ] ; then
 				echo "$get_time,$pth_pressure" >> ${wdir}/pth_pressure_data.csv
+				if [ -f /home/debian/send.data ] ; then
+					curl -X POST "http://192.168.0.114:8100/v1/data/for/pth_pressure?pressure=${pth_pressure}"
+				fi
 			fi
 		fi
 
 		if [ "x$pth_temp" != "x" ] ; then
 			if [ 0 -eq "$(echo "${pth_temp} > ${max_temperature}" | bc)" ] ; then
 				echo "$get_time,$pth_temp" >> ${wdir}/pth_temp_data.csv
+				if [ -f /home/debian/send.data ] ; then
+					curl -X POST "http://192.168.0.114:8100/v1/data/for/pth_temp?temp=${pth_temp}"
+				fi
 			fi
 		fi
 
@@ -184,6 +190,9 @@ run () {
 
 		if [ "x$pth_humidity" != "x" ] ; then
 			echo "$get_time,$pth_humidity" >> ${wdir}/pth_humidity_data.csv
+			if [ -f /home/debian/send.data ] ; then
+				curl -X POST "http://192.168.0.114:8100/v1/data/for/pth_humidity?humidity=${pth_humidity}"
+			fi
 		fi
 
 #		if [ "x$wlh" != "x" ] ; then
