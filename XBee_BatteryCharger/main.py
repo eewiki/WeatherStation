@@ -36,7 +36,7 @@ while xbee.atcmd("AI") != 0:
 
 print("#Online...")
 
-TARGET_64BIT_ADDR = b'\x00\x13\xA2\x00\x41\xA7\xAD\xBC'
+TARGET_64BIT_ADDR = b'\x00\x13\xA2\x00\x41\xA7\xAD\x9A'
 
 #ina219:
 #A0:A1
