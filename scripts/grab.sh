@@ -46,7 +46,8 @@ run () {
 	# Loop
 	while [ 1 ];
 	do
-		READ=`/usr/local/bin/grabserial -d /dev/ttyUSB1 -b 57600 -m "MsgFrom:" -q ":#"`
+		/usr/local/bin/grabserial -d /dev/ttyUSB1 -b 57600 -m "MsgFrom:" -q ":#" -o /tmp/READ.txt -Q
+		READ=$(cat /tmp/READ.txt | tr -d "\n" | tr -d "\r" | tr -d '\000')
 		echo "[$READ]:[`date`]" >> /var/www/html/dygraphs/data/log.txt
 
 		solar_volt=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
