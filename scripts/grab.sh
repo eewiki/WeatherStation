@@ -33,7 +33,7 @@ new_day () {
 }
 
 run () {
-	port="/dev/ttyUSB0"
+	port="/dev/ttyUSB1"
 
 	stty -F ${port} raw speed 57600 &> /dev/null
 
@@ -46,7 +46,7 @@ run () {
 	# Loop
 	while [ 1 ];
 	do
-		READ=`grabserial -d /dev/ttyUSB0 -b 57600 -m "MsgFrom:" -q ":#"`
+		READ=`grabserial -d /dev/ttyUSB1 -b 57600 -m "MsgFrom:" -q ":#"`
 		echo "[$READ]:[`date`]" >> /var/www/html/dygraphs/data/log.txt
 
 		solar_volt=$(echo $READ | grep -a '0013A20041A7AE31:Solar:' | grep -a BusVolt | awk -F ':' '{print $6}' | awk -F 'V' '{print $1}' || true)
