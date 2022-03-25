@@ -118,7 +118,7 @@ run () {
 			if [ 1 -eq "$(echo "${solar_mamp} > 0" | bc)" ] ; then
 				echo "$get_time,$solar_mamp" >> ${wdir}/solar_current_data.csv
 				if [ -f /home/debian/send.data ] ; then
-					curl -X POST "http://192.168.0.114:8100/v1/data/for/Solar?volt=${solar_volt}&mamp=${solar_mamp}"
+					curl -X POST "http://127.0.0.1:8100/v1/data/for/Solar?volt=${solar_volt}&mamp=${solar_mamp}"
 				fi
 			else
 				echo "$get_time,0" >> ${wdir}/solar_current_data.csv
@@ -129,7 +129,7 @@ run () {
 			echo "$get_time,$battery_volt" >> ${wdir}/battery_voltage_data.csv
 			echo "$get_time,$battery_mamp" >> ${wdir}/battery_current_data.csv
 			if [ -f /home/debian/send.data ] ; then
-				curl -X POST "http://192.168.0.114:8100/v1/data/for/Battery?volt=${battery_volt}&mamp=${battery_mamp}"
+				curl -X POST "http://127.0.0.1:8100/v1/data/for/Battery?volt=${battery_volt}&mamp=${battery_mamp}"
 			fi
 		fi
 
@@ -137,7 +137,7 @@ run () {
 			echo "$get_time,$fivev_volt" >> ${wdir}/fivev_voltage_data.csv
 			echo "$get_time,$fivev_mamp" >> ${wdir}/fivev_current_data.csv
 			if [ -f /home/debian/send.data ] ; then
-				curl -X POST "http://192.168.0.114:8100/v1/data/for/5VRail?volt=${fivev_volt}&mamp=${fivev_mamp}"
+				curl -X POST "http://127.0.0.1:8100/v1/data/for/5VRail?volt=${fivev_volt}&mamp=${fivev_mamp}"
 			fi
 		fi
 
@@ -145,7 +145,7 @@ run () {
 			echo "$get_time,$twelvev_volt" >> ${wdir}/twelvev_voltage_data.csv
 			echo "$get_time,$twelvev_mamp" >> ${wdir}/twelvev_current_data.csv
 			if [ -f /home/debian/send.data ] ; then
-				curl -X POST "http://192.168.0.114:8100/v1/data/for/12VRail?volt=${twelvev_volt}&mamp=${twelvev_mamp}"
+				curl -X POST "http://127.0.0.1:8100/v1/data/for/12VRail?volt=${twelvev_volt}&mamp=${twelvev_mamp}"
 			fi
 		fi
 
@@ -153,7 +153,7 @@ run () {
 			if [ 0 -eq "$(echo "${battery_hdc_temp} > ${max_temperature}" | bc)" ] ; then
 				echo "$get_time,$battery_hdc_temp" >> ${wdir}/battery_hdc_temp_data.csv
 				if [ -f /home/debian/send.data ] ; then
-					curl -X POST "http://192.168.0.114:8100/v1/data/for/Battery_Temp?Temperature=${battery_hdc_temp}"
+					curl -X POST "http://127.0.0.1:8100/v1/data/for/Battery_Temp?Temperature=${battery_hdc_temp}"
 				fi
 			fi
 		fi
@@ -162,7 +162,7 @@ run () {
 			if [ 0 -eq "$(echo "${pth_pressure} > ${max_pressure}" | bc)" ] ; then
 				echo "$get_time,$pth_pressure" >> ${wdir}/pth_pressure_data.csv
 				if [ -f /home/debian/send.data ] ; then
-					curl -X POST "http://192.168.0.114:8100/v1/data/for/pth_pressure?pressure=${pth_pressure}"
+					curl -X POST "http://127.0.0.1:8100/v1/data/for/pth_pressure?pressure=${pth_pressure}"
 				fi
 			fi
 		fi
@@ -171,7 +171,7 @@ run () {
 			if [ 0 -eq "$(echo "${pth_temp} > ${max_temperature}" | bc)" ] ; then
 				echo "$get_time,$pth_temp" >> ${wdir}/pth_temp_data.csv
 				if [ -f /home/debian/send.data ] ; then
-					curl -X POST "http://192.168.0.114:8100/v1/data/for/pth_temp?temp=${pth_temp}"
+					curl -X POST "http://127.0.0.1:8100/v1/data/for/pth_temp?temp=${pth_temp}"
 				fi
 			fi
 		fi
@@ -191,7 +191,7 @@ run () {
 		if [ "x$pth_humidity" != "x" ] ; then
 			echo "$get_time,$pth_humidity" >> ${wdir}/pth_humidity_data.csv
 			if [ -f /home/debian/send.data ] ; then
-				curl -X POST "http://192.168.0.114:8100/v1/data/for/pth_humidity?humidity=${pth_humidity}"
+				curl -X POST "http://127.0.0.1:8100/v1/data/for/pth_humidity?humidity=${pth_humidity}"
 			fi
 		fi
 
