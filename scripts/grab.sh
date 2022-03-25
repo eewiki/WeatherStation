@@ -46,7 +46,9 @@ run () {
 	# Loop
 	while [ 1 ];
 	do
-		/usr/local/bin/grabserial -d /dev/ttyUSB1 -b 57600 -m "MsgFrom:" -q ":#" -o /tmp/READ.txt
+		rm /tmp/READ.txt
+		/usr/local/bin/grabserial -d /dev/ttyUSB1 -b 57600 -m "MsgFrom:" -q ":#" -o /tmp/READ.txt -Q
+		sync
 		READ=$(cat /tmp/READ.txt | tr -d "\n" | tr -d "\r" | tr -d '\000')
 		echo "[$READ]:[`date`]" >> /var/www/html/dygraphs/data/log.txt
 
